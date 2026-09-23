@@ -44,3 +44,6 @@ git clone https://github.com/lagalsa-pixel/gpon-ftth-planner.git
 - `backup L2: tiles cache` — кэш спутниковых тайлов z18
 - `backup L3: source imagery` — исходные подложки и метод. материалы (upload/)
 - `backup L4: release maps` — карты зон ОРШ по НП (download/snp_vko/, ftth_pipeline/)
+- `backup L5: ops` — журнал работ и служебные скрипты бэкапа (49_github_push.sh, 49_tmp_safety_copy.sh)
+
+Скрипт отправки: `scripts/49_github_push.sh <TOKEN>` (послойный пуш + Release с zip-активом).

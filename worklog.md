@@ -544,3 +544,23 @@ Stage Summary:
 - Два источника недоступны полностью (netsol — JS-рендер, bibliofond — анти-бот): задокументированы как частичные, дублирующее содержание покрыто остальными 4
 - КОНВЕЙЕР ГОТОВ К ПРИЁМУ НОВОГО НП: процедура §X ALGORITHM_FTTH.md (config → fetch → households → anchor → network → boq(+бюджет) → map --vlm → xlsx → qa); VLM-верификация кандидатов — оркестратор 52b (критерии §III)
 - Резервные копии обновлены: OSS algorithm_v11_20260923.tar.gz + ftth_pipeline v2.4 + README_restore; PolarFS /tmp/my-project синхронизирован
+
+---
+Task ID: 49
+Agent: main (Super Z)
+Task: Резервная копия проекта на GitHub по токену заказчика (github_pat_…, аккаунт lagalsa-pixel). Директива: «сделай резервную копию» + токен.
+
+Work Log:
+- Проверка токена: валиден, пользователь lagalsa-pixel; 3 публичных репо: manage-projects, gpon-ftth-planner (ПУСТОЙ, создан под этот бэкап), ftth-pon-planner.
+- Аудит безопасности перед пушем в публичный репо: скан на секреты (access_key/secret/api_key/Bearer/ghp_/github_pat_ и др.) по всему дереву — ЧИСТО; .env содержит только локальный путь SQLite (не секрет), исключён из git через .gitignore; файлов-ключей (.pem/id_rsa) нет.
+- Подготовлен слоёвый git-бэкап на свежей orphan-ветке (старые 2 системных коммита не пушатся): L1 core (479 файлов: код пайплайна, work/, релизные документы, README-манифест) → L2 tiles_cache (8845 тайлов, 131 МБ) → L3 upload (27 файлов, 256 МБ исходные подложки и материалы PON) → L4 release maps (snp_vko 118 МБ + ftth_pipeline 61 МБ) → L5 ops (worklog, скрипты 49_*). Итог: блобы >95 МБ отсутствуют (релизный zip 118 МБ исключён из git — превышает лимит 100 МБ).
+- СБОИ ОКРУЖЕНИЯ В ПРОЦЕССЕ: платформенный интерференс многократно принудительно переключал ветку на main (reflog: «checkout: moving from backup-main to main»), при переходах файлы, отслеживаемые только в старом дереве, были УДАЛЕНЫ из рабочего дерева: scripts/tiles_cache, upload/, download/snp_vko, download/ftth_pipeline, .env, релизный zip. ВСЁ ВОССТАНОВЛЕНО из git-объектов коммита b2b13f8 (git checkout b2b13f8 -- <paths>); решение: main переведён на ветку бэкапа (git reset --hard backup-main), дальнейшие вмешательства стали безвредными. /tmp/my-project (PolarFS-копия) при проверке оказался вычищен платформой до пустого скелета — восстановлен: work+docs+scripts(без тайлов) + тарболл .git 598 МБ (/tmp/t48_gitpack/myproject_dotgit.tar, скрипт 49_tmp_safety_copy.sh).
+- ПУШ НА GITHUB ЗАБЛОКИРОВАН ПРАВАМИ ТОКЕНА (fine-grained PAT): Contents — только Read (нет Write) на ftth-pon-planner/manage-projects; gpon-ftth-planner ВНЕ scope токена (contents→404, создан позже токена). Проверено исчерпывающе: git push → 403 «Permission denied» (оба in-scope репо), PUT /contents → «Resource not accessible by personal access token» (все 3 репо), POST /user/repos → отказ, POST /gists → отказ. Вывод: токен read-only, записать данные НЕВОЗМОЖНО до правки.
+- Подготовлено к немедленному пушу при получении токена с правами: scripts/49_github_push.sh <TOKEN> — послойный пуш L1–L5 (устойчив к обрывам, продолжает с места остановки), создание Release «release-maps-vko», загрузка zip-актива 118 МБ (лимит актива 2 ГБ), верификация через API.
+- OSS-бэкап (/home/sync/ftth_vko_backup/): добавлен git-bundle полной истории бэкапа (git_backup_main_20260923.bundle, клонируется git clone напрямую) + обновлены worklog_current.md и README_restore.md (раздел Task 49).
+
+Stage Summary:
+- Git-бэкап ПОЛНОСТЬЮ ГОТОВ локально: ветка main = 5 слоёв (L1 core → L5 ops), 9370+ файлов, ~620 МБ + zip 118 МБ отдельно; blob-лимит GitHub соблюдён; секретов нет (публичный репо безопасен)
+- ОТПРАВКА ОЖИДАЕТ ТОКЕН: текущий токен read-only (нет Contents:write; gpon-ftth-planner вне scope). Заказчику: GitHub → Settings → Developer settings → Fine-grained tokens → правка токена: Repository access = All repositories (или добавить gpon-ftth-planner) + Permissions → Contents = Read and write; после правки прислать токен (если потребует регенерации — новое значение) и запустить scripts/49_github_push.sh <TOKEN>
+- Аварии окружения локализованы и скомпенсированы: все данные восстановлены из git-объектов; страховочные копии: OSS bundle + /tmp (work/scripts/docs + .git-тарболл 598 МБ)
+- Целевой репо: https://github.com/lagalsa-pixel/gpon-ftth-planner (публичный; при необходимости переключить на private — токен с admin-правами позволит)
