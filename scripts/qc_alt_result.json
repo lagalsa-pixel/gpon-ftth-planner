@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "Кроп 1: по дороге — красная линия чётко следует по полосе грунтовой дороги, отделяющей лес от открытых участков.\nКроп 2: по дороге — красная линия проходит вдоль существующей грунтовки/просеки, не срезая траву или поле.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1789480497,
+  "id": "202609152154548e0d55809f0e4a9a",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202609152154548e0d55809f0e4a9a",
+  "usage": {
+    "completion_tokens": 65,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1917,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1982
+  }
+}

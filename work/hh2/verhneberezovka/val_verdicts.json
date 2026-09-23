@@ -1,0 +1,422 @@
+{
+ "val_A_hh95__A_hh171.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 0,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Пустой участок без строений внутри контура"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с пристройкой другого цвета"
+  }
+ },
+ "val_B_hh417__A_hh352.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Два отдельных строения, не соединенных в единый блок"
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Сблокированная пара с забором посередине и швом на крыше"
+  }
+ },
+ "val_A_hh159__B_hh392.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока с общей кровлей и забором посередине"
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Два отдельных строения на расстоянии друг от друга"
+  }
+ },
+ "val_A_hh139__A_hh33.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока одинаковой формы с разной кровлей"
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Сблокированная пара с общей линией крыши"
+  }
+ },
+ "val_B_hh233__A_hh11.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока одинаковой формы с забором посередине"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Одно длинное здание без признаков разделения"
+  }
+ },
+ "val_A_hh137__A_hh179.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока одинаковой формы с видимым швом и забором"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с пристройкой меньшего размера"
+  }
+ },
+ "val_A_hh94__B_hh535.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Одиночное строение стандартных размеров без признаков разделения."
+  },
+  "v2": {
+   "n_properties": 3,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Три отдельных дома с заборами и видимыми стыками крыш."
+  }
+ },
+ "val_A_hh75__A_hh172.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока с общей крышей и забором посередине"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с небольшой пристройкой справа"
+  }
+ },
+ "val_A_hh12__A_hh65.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока с общей крышей и забором посередине"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Одно сплошное строение без признаков разделения"
+  }
+ },
+ "val_B_hh217__A_hh136.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с пристройкой меньшего размера и другой формы"
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два сблокированных дома с общей крышей и разделительным забором"
+  }
+ },
+ "val_B_hh316__A_hh170.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два одинаковых блока с забором между ними"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с пристройками разной формы"
+  }
+ },
+ "val_B_hh612__A_hh115.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 4,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Четыре отдельных строения в ряд, одинаковой формы и размера."
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Сблокированная пара домов с забором посередине фасада."
+  }
+ },
+ "val_A_hh39__B_hh384.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": false,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два блока с общей крышей разного цвета и видимым швом"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Три отдельных строения на одном участке"
+  }
+ },
+ "val_A_hh279__B_hh381.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Основной дом с небольшой пристройкой другой формы"
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два отдельных дома с забором между ними"
+  }
+ },
+ "val_A_hh219__A_hh51.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Одиночный дом стандартного размера без признаков разделения."
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Сблокированная пара: забор по центру, две одинаковые кровли."
+  }
+ },
+ "val_B_hh728__A_hh220.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Два отдельных блока с одинаковыми крышами, расположенных рядом"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с пристройкой меньшего размера и другой формы"
+  }
+ },
+ "val_A_hh80__A_hh112.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": true,
+   "roof_same_shape": false,
+   "comment": "Один дом с небольшой пристройкой"
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Сблокированная пара с забором посередине"
+  }
+ },
+ "val_A_hh118__B_hh373.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Длинное здание с швом посередине и перпендикулярным забором"
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": false,
+   "comment": "Два отдельных строения, не соединенных в одно владение"
+  }
+ },
+ "val_B_hh289__A_hh50.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 3,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Три отдельных строения, расположенных рядом, но не соединённых общей крышей."
+  },
+  "v2": {
+   "n_properties": 2,
+   "fence_perp_center": true,
+   "fence_extends": true,
+   "seam_visible": true,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Сблокированная пара с общим коньком и забором посередине фасада."
+  }
+ },
+ "val_B_hh528__A_hh229.jpg": {
+  "ok": true,
+  "v1": {
+   "n_properties": 3,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Три отдельных строения, расположенных ступенчато на склоне."
+  },
+  "v2": {
+   "n_properties": 1,
+   "fence_perp_center": false,
+   "fence_extends": false,
+   "seam_visible": false,
+   "annex": false,
+   "roof_same_shape": true,
+   "comment": "Одно отдельное владение с двускатной крышей."
+  }
+ }
+}

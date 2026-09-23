@@ -1,0 +1,74 @@
+{
+ "verhneberezovka": {
+  "file": true,
+  "size_MB": 24.0,
+  "clipped_points": 0,
+  "zones": "9+ЦУ",
+  "marker_colors_bad": 0,
+  "cu_star_red": true,
+  "header_dark_samples": 81,
+  "legend_dark": 1776,
+  "preview": true,
+  "OK": true
+ },
+ "solnechnoe": {
+  "file": true,
+  "size_MB": 15.3,
+  "clipped_points": 0,
+  "zones": "0+ЦУ",
+  "marker_colors_bad": 0,
+  "cu_star_red": true,
+  "header_dark_samples": 71,
+  "legend_dark": 1693,
+  "preview": true,
+  "OK": true
+ },
+ "perevalnoe": {
+  "file": true,
+  "size_MB": 12.3,
+  "clipped_points": 0,
+  "zones": "5+ЦУ",
+  "marker_colors_bad": 0,
+  "cu_star_red": true,
+  "header_dark_samples": 68,
+  "legend_dark": 1780,
+  "preview": true,
+  "OK": true
+ },
+ "vinnoe": {
+  "file": true,
+  "size_MB": 19.6,
+  "clipped_points": 0,
+  "zones": "8+ЦУ",
+  "marker_colors_bad": 0,
+  "cu_star_red": true,
+  "header_dark_samples": 73,
+  "legend_dark": 1641,
+  "preview": true,
+  "OK": true
+ },
+ "prigorodnoe": {
+  "file": true,
+  "size_MB": 15.6,
+  "clipped_points": 0,
+  "zones": "3+ЦУ",
+  "marker_colors_bad": 0,
+  "cu_star_red": true,
+  "header_dark_samples": 69,
+  "legend_dark": 1629,
+  "preview": true,
+  "OK": true
+ },
+ "altaiskiy": {
+  "file": true,
+  "size_MB": 16.4,
+  "clipped_points": 0,
+  "zones": "3+ЦУ",
+  "marker_colors_bad": 0,
+  "cu_star_red": true,
+  "header_dark_samples": 54,
+  "legend_dark": 1642,
+  "preview": true,
+  "OK": true
+ }
+}

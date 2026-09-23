@@ -1,0 +1,1206 @@
+{
+ "model": {
+  "scheme": "D — децентрализованная: зонные ОРШ 1:64, единый узел OLT (v2: фидеры по кратчайшим путям)",
+  "s_min_km": 15.0,
+  "min_zone": 48,
+  "fiber_reserve": 1.25,
+  "min_fibers": 8,
+  "std_fibers": [
+   8,
+   12,
+   16,
+   24,
+   32,
+   48,
+   64,
+   72,
+   96
+  ],
+  "cable_stock": 1.1,
+  "drop_stock": 1.05,
+  "suspend_per_km": 30,
+  "drop_anchors_per_dh": 2,
+  "drop_fix_per_dh": 6,
+  "consum_stock": 1.1,
+  "split_ratio": 64,
+  "orsh_ports_row": [
+   144,
+   288,
+   576,
+   864,
+   1152
+  ],
+  "orsh_ports_row_zone": [
+   48,
+   96,
+   144,
+   288,
+   576
+  ],
+  "feeder_fibers": "ceil(1.25 x сплиттеры зоны)",
+  "feeder_routing": "v2: кратчайший путь ЦУ->ОРШ по дорожному графу (Дейкстра); на общих с деревом участках — в одном кабеле, вне дерева — отдельный кабель >= 8 волокон",
+  "note": "Топология распределительной сети, муфты, дропы и состав зон — без изменений (как в выпущенной книге); исправлена только прокладка фидерных трасс ЦУ->зонные ОРШ (шаг 43: путь в дереве мог быть вдвое длиннее кратчайшего). Межселённый транспорт — за рамками расчёта."
+ },
+ "villages": [
+  {
+   "num": "01",
+   "name": "Верхнеберезовка",
+   "raion": "Глубоковский р-н",
+   "so": "Верхнеберезовский с.о.",
+   "dhx_excel": 940,
+   "orsh_bld": "здание пожарной части №26 (198 м²)",
+   "key": "verhneberezovka",
+   "net": "network.json",
+   "dhx_served": 799,
+   "couplers": 381,
+   "mufty": 372,
+   "feeder_km": 25.93,
+   "drop_km": 32.63,
+   "avg_drop_m": 40.8,
+   "max_drop_m": 132.5,
+   "n_zones": 9,
+   "orsh": 10,
+   "zones": [
+    {
+     "root_dist_m": 0.0,
+     "houses": 104,
+     "splitters": 2,
+     "feeder_fibers": 0,
+     "orsh_ports": 144,
+     "zone": "ЦУ (корневая)",
+     "px": [
+      3976.7,
+      3898.2
+     ],
+     "lat": 50.279246,
+     "lon": 82.216534
+    },
+    {
+     "root_dist_m": 738.4,
+     "houses": 79,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      4099.2,
+      5104.1
+     ],
+     "lat": 50.275084,
+     "lon": 82.217191
+    },
+    {
+     "root_dist_m": 1201.3,
+     "houses": 46,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      1833.8,
+      2290.9
+     ],
+     "lat": 50.284793,
+     "lon": 82.205038
+    },
+    {
+     "root_dist_m": 1014.1,
+     "houses": 23,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 48,
+     "zone": "зонный ОРШ",
+     "px": [
+      5249.3,
+      5908.8
+     ],
+     "lat": 50.272307,
+     "lon": 82.22336
+    },
+    {
+     "root_dist_m": 431.5,
+     "houses": 78,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2910.5,
+      3523.7
+     ],
+     "lat": 50.280539,
+     "lon": 82.210814
+    },
+    {
+     "root_dist_m": 798.2,
+     "houses": 101,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 144,
+     "zone": "зонный ОРШ",
+     "px": [
+      2652.0,
+      4667.6
+     ],
+     "lat": 50.276591,
+     "lon": 82.209427
+    },
+    {
+     "root_dist_m": 609.0,
+     "houses": 92,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 144,
+     "zone": "зонный ОРШ",
+     "px": [
+      2920.1,
+      3134.5
+     ],
+     "lat": 50.281882,
+     "lon": 82.210866
+    },
+    {
+     "root_dist_m": 835.4,
+     "houses": 82,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2090.9,
+      3534.9
+     ],
+     "lat": 50.2805,
+     "lon": 82.206417
+    },
+    {
+     "root_dist_m": 1359.3,
+     "houses": 77,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      5619.2,
+      6607.3
+     ],
+     "lat": 50.269896,
+     "lon": 82.225345
+    },
+    {
+     "root_dist_m": 1313.4,
+     "houses": 117,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 144,
+     "zone": "зонный ОРШ",
+     "px": [
+      1994.0,
+      1951.7
+     ],
+     "lat": 50.285964,
+     "lon": 82.205898
+    }
+   ],
+   "fiber_km": 566.6,
+   "total_cable_km": 27.521,
+   "cable_km": {
+    "8": 14.9,
+    "12": 3.2,
+    "16": 2.1,
+    "24": 3.3,
+    "32": 2.3,
+    "48": 2.5,
+    "64": 1.7,
+    "72": 0.3,
+    "96": 0.5
+   },
+   "cable_km_raw": 30.27,
+   "drop_cable_km": 34.3,
+   "orsh_ports": 1104,
+   "splitters64": 18,
+   "top_fibers": 120,
+   "max_parallel": 2,
+   "feeder_route_km": 4.89,
+   "routes": {
+    "avg_m": 412.0,
+    "med_m": 314.3,
+    "p90_m": 857.8,
+    "max_m": 2754.5
+   },
+   "cut_log": [
+    {
+     "node": [
+      4099.22,
+      5104.07
+     ],
+     "sav_km": 418.0
+    },
+    {
+     "node": [
+      1833.83,
+      2290.9
+     ],
+     "sav_km": 330.5
+    },
+    {
+     "node": [
+      5249.32,
+      5908.8
+     ],
+     "sav_km": 173.8
+    },
+    {
+     "node": [
+      2910.47,
+      3523.68
+     ],
+     "sav_km": 133.8
+    },
+    {
+     "node": [
+      2652.01,
+      4667.61
+     ],
+     "sav_km": 81.9
+    },
+    {
+     "node": [
+      2920.13,
+      3134.51
+     ],
+     "sav_km": 60.4
+    },
+    {
+     "node": [
+      2090.9,
+      3534.94
+     ],
+     "sav_km": 41.6
+    },
+    {
+     "node": [
+      5619.17,
+      6607.29
+     ],
+     "sav_km": 29.2
+    },
+    {
+     "node": [
+      1994.0,
+      1951.67
+     ],
+     "sav_km": 18.5
+    }
+   ],
+   "materials": {
+    "orsh": 10,
+    "splitters": 18,
+    "olt_ports": 18,
+    "pigtails": 835,
+    "mufty": 372,
+    "drop_cable_km": 34.3,
+    "abonent_boxes": 799,
+    "fast_conn": 879,
+    "splices": 1798,
+    "kdzs": 1798,
+    "suspend_kits": 826,
+    "drop_anchors": 1598,
+    "drop_fix": 4794,
+    "orsh_ports": 1104,
+    "cable_8": 14.9,
+    "cable_12": 3.2,
+    "cable_16": 2.1,
+    "cable_24": 3.3,
+    "cable_32": 2.3,
+    "cable_48": 2.5,
+    "cable_64": 1.7,
+    "cable_72": 0.3,
+    "cable_96": 0.5
+   },
+   "feeder_model": "v2: кратчайший путь Дейкстра по дорожному графу"
+  },
+  {
+   "num": "02",
+   "name": "Солнечное",
+   "raion": "Глубоковский р-н",
+   "so": "Бобровский с.о.",
+   "dhx_excel": 366,
+   "orsh_bld": "общественное здание в центре села (145,7 м²)",
+   "key": "solnechnoe",
+   "net": "network_v2.json",
+   "dhx_served": 112,
+   "couplers": 70,
+   "mufty": 70,
+   "feeder_km": 4.47,
+   "drop_km": 3.66,
+   "avg_drop_m": 32.7,
+   "max_drop_m": 73.1,
+   "n_zones": 0,
+   "orsh": 1,
+   "zones": [
+    {
+     "root_dist_m": 0.0,
+     "houses": 112,
+     "splitters": 2,
+     "feeder_fibers": 0,
+     "orsh_ports": 144,
+     "zone": "ЦУ (корневая)",
+     "px": [
+      1657.1,
+      2198.9
+     ],
+     "lat": 50.051025,
+     "lon": 82.71199
+    }
+   ],
+   "fiber_km": 90.3,
+   "total_cable_km": 4.47,
+   "cable_km": {
+    "8": 2.5,
+    "12": 0.5,
+    "16": 0.4,
+    "24": 0.8,
+    "32": 0.5,
+    "48": 0.1,
+    "64": 0.3,
+    "96": 0.2
+   },
+   "cable_km_raw": 4.92,
+   "drop_cable_km": 3.9,
+   "orsh_ports": 144,
+   "splitters64": 2,
+   "top_fibers": 92,
+   "max_parallel": 1,
+   "feeder_route_km": 0.0,
+   "routes": {
+    "avg_m": 503.8,
+    "med_m": 494.7,
+    "p90_m": 810.9,
+    "max_m": 991.6
+   },
+   "cut_log": [],
+   "materials": {
+    "orsh": 1,
+    "splitters": 2,
+    "olt_ports": 2,
+    "pigtails": 116,
+    "mufty": 70,
+    "drop_cable_km": 3.9,
+    "abonent_boxes": 112,
+    "fast_conn": 124,
+    "splices": 251,
+    "kdzs": 251,
+    "suspend_kits": 135,
+    "drop_anchors": 224,
+    "drop_fix": 672,
+    "orsh_ports": 144,
+    "cable_8": 2.5,
+    "cable_12": 0.5,
+    "cable_16": 0.4,
+    "cable_24": 0.8,
+    "cable_32": 0.5,
+    "cable_48": 0.1,
+    "cable_64": 0.3,
+    "cable_72": 0.0,
+    "cable_96": 0.2
+   },
+   "feeder_model": "v2: кратчайший путь Дейкстра по дорожному графу"
+  },
+  {
+   "num": "03",
+   "name": "Перевальное",
+   "raion": "Глубоковский р-н",
+   "so": "Красноярский с.о.",
+   "dhx_excel": 339,
+   "orsh_bld": "общественное здание в центре (417 м²)",
+   "key": "perevalnoe",
+   "net": "network_v2.json",
+   "dhx_served": 350,
+   "couplers": 162,
+   "mufty": 157,
+   "feeder_km": 10.11,
+   "drop_km": 12.0,
+   "avg_drop_m": 34.3,
+   "max_drop_m": 94.6,
+   "n_zones": 5,
+   "orsh": 6,
+   "zones": [
+    {
+     "root_dist_m": 0.0,
+     "houses": 68,
+     "splitters": 2,
+     "feeder_fibers": 0,
+     "orsh_ports": 144,
+     "zone": "ЦУ (корневая)",
+     "px": [
+      4077.9,
+      3025.9
+     ],
+     "lat": 50.238154,
+     "lon": 82.290462
+    },
+    {
+     "root_dist_m": 623.3,
+     "houses": 46,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2684.9,
+      2667.0
+     ],
+     "lat": 50.239393,
+     "lon": 82.282989
+    },
+    {
+     "root_dist_m": 1289.0,
+     "houses": 51,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      1867.3,
+      2352.4
+     ],
+     "lat": 50.24048,
+     "lon": 82.278603
+    },
+    {
+     "root_dist_m": 417.1,
+     "houses": 60,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      3555.3,
+      2461.5
+     ],
+     "lat": 50.240103,
+     "lon": 82.287659
+    },
+    {
+     "root_dist_m": 466.8,
+     "houses": 49,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      4682.1,
+      3208.1
+     ],
+     "lat": 50.237524,
+     "lon": 82.293703
+    },
+    {
+     "root_dist_m": 703.4,
+     "houses": 76,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2857.5,
+      3234.5
+     ],
+     "lat": 50.237433,
+     "lon": 82.283915
+    }
+   ],
+   "fiber_km": 216.5,
+   "total_cable_km": 10.307,
+   "cable_km": {
+    "8": 5.0,
+    "12": 1.4,
+    "16": 0.7,
+    "24": 1.7,
+    "32": 1.0,
+    "48": 1.0,
+    "64": 0.7,
+    "72": 0.1,
+    "96": 0.1
+   },
+   "cable_km_raw": 11.34,
+   "drop_cable_km": 12.7,
+   "orsh_ports": 624,
+   "splitters64": 8,
+   "top_fibers": 96,
+   "max_parallel": 1,
+   "feeder_route_km": 2.27,
+   "routes": {
+    "avg_m": 372.6,
+    "med_m": 369.5,
+    "p90_m": 670.0,
+    "max_m": 1033.3
+   },
+   "cut_log": [
+    {
+     "node": [
+      2684.88,
+      2667.03
+     ],
+     "sav_km": 178.3
+    },
+    {
+     "node": [
+      1867.28,
+      2352.41
+     ],
+     "sav_km": 49.0
+    },
+    {
+     "node": [
+      3555.34,
+      2461.52
+     ],
+     "sav_km": 36.1
+    },
+    {
+     "node": [
+      4682.1,
+      3208.14
+     ],
+     "sav_km": 27.2
+    },
+    {
+     "node": [
+      2857.51,
+      3234.49
+     ],
+     "sav_km": 19.5
+    }
+   ],
+   "materials": {
+    "orsh": 6,
+    "splitters": 8,
+    "olt_ports": 8,
+    "pigtails": 366,
+    "mufty": 157,
+    "drop_cable_km": 12.7,
+    "abonent_boxes": 350,
+    "fast_conn": 385,
+    "splices": 788,
+    "kdzs": 788,
+    "suspend_kits": 310,
+    "drop_anchors": 700,
+    "drop_fix": 2100,
+    "orsh_ports": 624,
+    "cable_8": 5.0,
+    "cable_12": 1.4,
+    "cable_16": 0.7,
+    "cable_24": 1.7,
+    "cable_32": 1.0,
+    "cable_48": 1.0,
+    "cable_64": 0.7,
+    "cable_72": 0.1,
+    "cable_96": 0.1
+   },
+   "feeder_model": "v2: кратчайший путь Дейкстра по дорожному графу"
+  },
+  {
+   "num": "04",
+   "name": "Винное",
+   "raion": "Глубоковский р-н",
+   "so": "Тарханский с.о.",
+   "dhx_excel": 490,
+   "orsh_bld": "здание у перекрёстка в центре (96 м²)",
+   "key": "vinnoe",
+   "net": "network_v2.json",
+   "dhx_served": 550,
+   "couplers": 255,
+   "mufty": 247,
+   "feeder_km": 17.12,
+   "drop_km": 24.9,
+   "avg_drop_m": 45.3,
+   "max_drop_m": 108.5,
+   "n_zones": 8,
+   "orsh": 9,
+   "zones": [
+    {
+     "root_dist_m": 0.0,
+     "houses": 33,
+     "splitters": 1,
+     "feeder_fibers": 0,
+     "orsh_ports": 144,
+     "zone": "ЦУ (корневая)",
+     "px": [
+      1961.6,
+      3892.7
+     ],
+     "lat": 50.057403,
+     "lon": 82.823519
+    },
+    {
+     "root_dist_m": 1178.8,
+     "houses": 37,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 48,
+     "zone": "зонный ОРШ",
+     "px": [
+      4249.7,
+      4410.7
+     ],
+     "lat": 50.055608,
+     "lon": 82.835794
+    },
+    {
+     "root_dist_m": 261.4,
+     "houses": 63,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2383.2,
+      3440.4
+     ],
+     "lat": 50.058972,
+     "lon": 82.825781
+    },
+    {
+     "root_dist_m": 545.0,
+     "houses": 82,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      861.5,
+      4288.8
+     ],
+     "lat": 50.05603,
+     "lon": 82.817617
+    },
+    {
+     "root_dist_m": 1305.6,
+     "houses": 57,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      1842.4,
+      2241.5
+     ],
+     "lat": 50.063129,
+     "lon": 82.82288
+    },
+    {
+     "root_dist_m": 370.1,
+     "houses": 72,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2712.0,
+      3964.3
+     ],
+     "lat": 50.057155,
+     "lon": 82.827545
+    },
+    {
+     "root_dist_m": 1770.9,
+     "houses": 50,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      5254.1,
+      5521.9
+     ],
+     "lat": 50.051754,
+     "lon": 82.841182
+    },
+    {
+     "root_dist_m": 1596.4,
+     "houses": 49,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      4249.0,
+      3336.3
+     ],
+     "lat": 50.059333,
+     "lon": 82.83579
+    },
+    {
+     "root_dist_m": 417.8,
+     "houses": 107,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 144,
+     "zone": "зонный ОРШ",
+     "px": [
+      2127.8,
+      3124.6
+     ],
+     "lat": 50.060067,
+     "lon": 82.824411
+    }
+   ],
+   "fiber_km": 354.2,
+   "total_cable_km": 18.09,
+   "cable_km": {
+    "8": 9.6,
+    "12": 1.9,
+    "16": 1.4,
+    "24": 3.0,
+    "32": 1.5,
+    "48": 1.7,
+    "64": 1.0,
+    "72": 0.2
+   },
+   "cable_km_raw": 19.9,
+   "drop_cable_km": 26.2,
+   "orsh_ports": 912,
+   "splitters64": 12,
+   "top_fibers": 72,
+   "max_parallel": 1,
+   "feeder_route_km": 4.23,
+   "routes": {
+    "avg_m": 369.3,
+    "med_m": 310.5,
+    "p90_m": 748.1,
+    "max_m": 1373.5
+   },
+   "cut_log": [
+    {
+     "node": [
+      4249.73,
+      4410.66
+     ],
+     "sav_km": 270.4
+    },
+    {
+     "node": [
+      2383.19,
+      3440.43
+     ],
+     "sav_km": 151.5
+    },
+    {
+     "node": [
+      861.49,
+      4288.83
+     ],
+     "sav_km": 84.7
+    },
+    {
+     "node": [
+      1842.42,
+      2241.48
+     ],
+     "sav_km": 80.4
+    },
+    {
+     "node": [
+      2712.02,
+      3964.31
+     ],
+     "sav_km": 37.7
+    },
+    {
+     "node": [
+      5254.09,
+      5521.92
+     ],
+     "sav_km": 37.7
+    },
+    {
+     "node": [
+      4248.96,
+      3336.28
+     ],
+     "sav_km": 22.9
+    },
+    {
+     "node": [
+      2127.84,
+      3124.64
+     ],
+     "sav_km": 20.1
+    }
+   ],
+   "materials": {
+    "orsh": 9,
+    "splitters": 12,
+    "olt_ports": 12,
+    "pigtails": 574,
+    "mufty": 247,
+    "drop_cable_km": 26.2,
+    "abonent_boxes": 550,
+    "fast_conn": 605,
+    "splices": 1237,
+    "kdzs": 1237,
+    "suspend_kits": 543,
+    "drop_anchors": 1100,
+    "drop_fix": 3300,
+    "orsh_ports": 912,
+    "cable_8": 9.6,
+    "cable_12": 1.9,
+    "cable_16": 1.4,
+    "cable_24": 3.0,
+    "cable_32": 1.5,
+    "cable_48": 1.7,
+    "cable_64": 1.0,
+    "cable_72": 0.2,
+    "cable_96": 0.0
+   },
+   "feeder_model": "v2: кратчайший путь Дейкстра по дорожному графу"
+  },
+  {
+   "num": "05",
+   "name": "Пригородное",
+   "raion": "г. Риддер",
+   "so": "—",
+   "dhx_excel": 365,
+   "orsh_bld": "нежилое здание у развилки дорог (84 м²)",
+   "key": "prigorodnoe",
+   "net": "network_v2.json",
+   "dhx_served": 244,
+   "couplers": 122,
+   "mufty": 119,
+   "feeder_km": 7.39,
+   "drop_km": 8.77,
+   "avg_drop_m": 35.9,
+   "max_drop_m": 89.1,
+   "n_zones": 3,
+   "orsh": 4,
+   "zones": [
+    {
+     "root_dist_m": 0.0,
+     "houses": 20,
+     "splitters": 1,
+     "feeder_fibers": 0,
+     "orsh_ports": 144,
+     "zone": "ЦУ (корневая)",
+     "px": [
+      3081.3,
+      4345.5
+     ],
+     "lat": 50.319464,
+     "lon": 83.518828
+    },
+    {
+     "root_dist_m": 683.9,
+     "houses": 80,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      3907.1,
+      3325.3
+     ],
+     "lat": 50.322982,
+     "lon": 83.523258
+    },
+    {
+     "root_dist_m": 519.5,
+     "houses": 85,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      3078.6,
+      3245.3
+     ],
+     "lat": 50.323258,
+     "lon": 83.518813
+    },
+    {
+     "root_dist_m": 250.0,
+     "houses": 59,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      3563.4,
+      4532.4
+     ],
+     "lat": 50.31882,
+     "lon": 83.521414
+    }
+   ],
+   "fiber_km": 167.7,
+   "total_cable_km": 7.76,
+   "cable_km": {
+    "8": 4.2,
+    "12": 0.7,
+    "16": 0.5,
+    "24": 1.2,
+    "32": 0.8,
+    "48": 0.7,
+    "64": 0.7,
+    "72": 0.1,
+    "96": 0.2
+   },
+   "cable_km_raw": 8.54,
+   "drop_cable_km": 9.3,
+   "orsh_ports": 432,
+   "splitters64": 6,
+   "top_fibers": 74,
+   "max_parallel": 1,
+   "feeder_route_km": 1.39,
+   "routes": {
+    "avg_m": 402.3,
+    "med_m": 380.6,
+    "p90_m": 749.4,
+    "max_m": 1019.5
+   },
+   "cut_log": [
+    {
+     "node": [
+      3907.11,
+      3325.35
+     ],
+     "sav_km": 222.7
+    },
+    {
+     "node": [
+      3078.57,
+      3245.35
+     ],
+     "sav_km": 53.6
+    },
+    {
+     "node": [
+      3563.41,
+      4532.41
+     ],
+     "sav_km": 40.4
+    }
+   ],
+   "materials": {
+    "orsh": 4,
+    "splitters": 6,
+    "olt_ports": 6,
+    "pigtails": 256,
+    "mufty": 119,
+    "drop_cable_km": 9.3,
+    "abonent_boxes": 244,
+    "fast_conn": 269,
+    "splices": 550,
+    "kdzs": 550,
+    "suspend_kits": 233,
+    "drop_anchors": 488,
+    "drop_fix": 1464,
+    "orsh_ports": 432,
+    "cable_8": 4.2,
+    "cable_12": 0.7,
+    "cable_16": 0.5,
+    "cable_24": 1.2,
+    "cable_32": 0.8,
+    "cable_48": 0.7,
+    "cable_64": 0.7,
+    "cable_72": 0.1,
+    "cable_96": 0.2
+   },
+   "feeder_model": "v2: кратчайший путь Дейкстра по дорожному графу"
+  },
+  {
+   "num": "06",
+   "name": "Алтайский",
+   "raion": "Глубоковский р-н",
+   "so": "Алтайский с.о.",
+   "dhx_excel": 716,
+   "orsh_bld": "здание на развилке дорог (156 м²)",
+   "key": "altaiskiy",
+   "net": "network_v2.json",
+   "dhx_served": 279,
+   "couplers": 150,
+   "mufty": 147,
+   "feeder_km": 8.06,
+   "drop_km": 8.93,
+   "avg_drop_m": 32.0,
+   "max_drop_m": 86.8,
+   "n_zones": 3,
+   "orsh": 4,
+   "zones": [
+    {
+     "root_dist_m": 0.0,
+     "houses": 78,
+     "splitters": 2,
+     "feeder_fibers": 0,
+     "orsh_ports": 144,
+     "zone": "ЦУ (корневая)",
+     "px": [
+      3154.2,
+      5764.4
+     ],
+     "lat": 50.247911,
+     "lon": 82.360526
+    },
+    {
+     "root_dist_m": 448.5,
+     "houses": 102,
+     "splitters": 2,
+     "feeder_fibers": 3,
+     "orsh_ports": 144,
+     "zone": "зонный ОРШ",
+     "px": [
+      3904.6,
+      5525.4
+     ],
+     "lat": 50.248736,
+     "lon": 82.364551
+    },
+    {
+     "root_dist_m": 706.2,
+     "houses": 49,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      3623.3,
+      7312.4
+     ],
+     "lat": 50.242565,
+     "lon": 82.363042
+    },
+    {
+     "root_dist_m": 256.7,
+     "houses": 50,
+     "splitters": 1,
+     "feeder_fibers": 2,
+     "orsh_ports": 96,
+     "zone": "зонный ОРШ",
+     "px": [
+      2702.2,
+      5984.1
+     ],
+     "lat": 50.247152,
+     "lon": 82.358101
+    }
+   ],
+   "fiber_km": 153.8,
+   "total_cable_km": 8.53,
+   "cable_km": {
+    "8": 5.3,
+    "12": 1.0,
+    "16": 0.5,
+    "24": 0.9,
+    "32": 0.6,
+    "48": 0.6,
+    "64": 0.6,
+    "96": 0.1
+   },
+   "cable_km_raw": 9.38,
+   "drop_cable_km": 9.4,
+   "orsh_ports": 480,
+   "splitters64": 6,
+   "top_fibers": 108,
+   "max_parallel": 2,
+   "feeder_route_km": 1.33,
+   "routes": {
+    "avg_m": 319.2,
+    "med_m": 266.5,
+    "p90_m": 611.3,
+    "max_m": 1038.9
+   },
+   "cut_log": [
+    {
+     "node": [
+      3904.64,
+      5525.44
+     ],
+     "sav_km": 55.7
+    },
+    {
+     "node": [
+      3623.34,
+      7312.42
+     ],
+     "sav_km": 49.8
+    },
+    {
+     "node": [
+      2702.2,
+      5984.13
+     ],
+     "sav_km": 21.2
+    }
+   ],
+   "materials": {
+    "orsh": 4,
+    "splitters": 6,
+    "olt_ports": 6,
+    "pigtails": 291,
+    "mufty": 147,
+    "drop_cable_km": 9.4,
+    "abonent_boxes": 279,
+    "fast_conn": 307,
+    "splices": 627,
+    "kdzs": 627,
+    "suspend_kits": 256,
+    "drop_anchors": 558,
+    "drop_fix": 1674,
+    "orsh_ports": 480,
+    "cable_8": 5.3,
+    "cable_12": 1.0,
+    "cable_16": 0.5,
+    "cable_24": 0.9,
+    "cable_32": 0.6,
+    "cable_48": 0.6,
+    "cable_64": 0.6,
+    "cable_72": 0.0,
+    "cable_96": 0.1
+   },
+   "feeder_model": "v2: кратчайший путь Дейкстра по дорожному графу"
+  }
+ ],
+ "totals": {
+  "dhx_served": 2334,
+  "dhx_excel": 3216,
+  "couplers": 1140,
+  "mufty": 1112,
+  "n_zones": 28,
+  "orsh": 34,
+  "feeder_km": 73.08,
+  "fiber_km": 1549.1,
+  "cable_km_raw": 84.35,
+  "drop_km": 90.89,
+  "drop_cable_km": 95.8,
+  "splitters64": 52,
+  "orsh_ports": 3696,
+  "splices": 5251,
+  "total_length_km": 180.1
+ },
+ "materials_total": {
+  "orsh": 34,
+  "splitters": 52,
+  "olt_ports": 52,
+  "pigtails": 2438,
+  "mufty": 1112,
+  "drop_cable_km": 95.8,
+  "abonent_boxes": 2334,
+  "fast_conn": 2569,
+  "splices": 5251,
+  "kdzs": 5251,
+  "suspend_kits": 2303,
+  "drop_anchors": 4668,
+  "drop_fix": 14004,
+  "orsh_ports": 3696,
+  "cable_8": 41.5,
+  "cable_12": 8.7,
+  "cable_16": 5.6,
+  "cable_24": 10.9,
+  "cable_32": 6.7,
+  "cable_48": 6.6,
+  "cable_64": 5.0,
+  "cable_72": 0.7,
+  "cable_96": 1.1
+ }
+}

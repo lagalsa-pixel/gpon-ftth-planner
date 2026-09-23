@@ -1,0 +1,71 @@
+{
+ "solnechnoe": {
+  "name": "Солнечное",
+  "zones": 0,
+  "dh_sum": 112,
+  "canvas": [
+   4372,
+   6457
+  ],
+  "size_mb": 8.2,
+  "dh_out_of_frame": 0,
+  "marker_colors": "ok",
+  "legend_corner": "BL"
+ },
+ "perevalnoe": {
+  "name": "Перевальное",
+  "zones": 5,
+  "dh_sum": 350,
+  "canvas": [
+   11115,
+   8395
+  ],
+  "size_mb": 26.1,
+  "dh_out_of_frame": 0,
+  "marker_colors": "ok",
+  "legend_corner": "BL"
+ },
+ "vinnoe": {
+  "name": "Винное",
+  "zones": 8,
+  "dh_sum": 550,
+  "canvas": [
+   12549,
+   12121
+  ],
+  "size_mb": 46.9,
+  "dh_out_of_frame": 5,
+  "marker_colors": "ok",
+  "legend_corner": "BL"
+ },
+ "prigorodnoe": {
+  "name": "Пригородное",
+  "zones": 3,
+  "dh_sum": 244,
+  "canvas": [
+   4210,
+   7232
+  ],
+  "size_mb": 9.2,
+  "dh_out_of_frame": 0,
+  "marker_colors": "ok",
+  "legend_corner": "BL"
+ },
+ "altaiskiy": {
+  "name": "Алтайский",
+  "zones": 3,
+  "dh_sum": 279,
+  "canvas": [
+   3709,
+   7800
+  ],
+  "size_mb": 9.6,
+  "dh_out_of_frame": 0,
+  "marker_colors": "ok",
+  "legend_corner": "TL"
+ },
+ "verhneberezovka": {
+  "note": "нет кадра пользователя; карта шага 33 не изменялась",
+  "mtime": "2026-09-18 05:45"
+ }
+}

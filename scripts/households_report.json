@@ -1,0 +1,110 @@
+[
+  {
+    "index": 0,
+    "key": "verhneberezevka",
+    "name": "с. Верхнеберезовка",
+    "file": "01_Верхнеберезовка_домохозяйства.png",
+    "W": 6807,
+    "H": 8612,
+    "mpp": 0.382,
+    "n_buildings_total": 827,
+    "n_households": 821,
+    "official": 940,
+    "offset_px": [
+      -4,
+      2
+    ],
+    "align_score": 2.08,
+    "size_mb": 102.3
+  },
+  {
+    "index": 1,
+    "key": "solnechnoe",
+    "name": "с. Солнечное",
+    "file": "02_Солнечное_домохозяйства.png",
+    "W": 7645,
+    "H": 6567,
+    "mpp": 0.383,
+    "n_buildings_total": 438,
+    "n_households": 434,
+    "official": 366,
+    "offset_px": [
+      -6,
+      -10
+    ],
+    "align_score": 2.27,
+    "size_mb": 71.8
+  },
+  {
+    "index": 2,
+    "key": "perevalnoe",
+    "name": "с. Перевальное",
+    "file": "03_Перевальное_домохозяйства.png",
+    "W": 6545,
+    "H": 4968,
+    "mpp": 0.382,
+    "n_buildings_total": 292,
+    "n_households": 292,
+    "official": 339,
+    "offset_px": [
+      -4,
+      0
+    ],
+    "align_score": 2.837,
+    "size_mb": 50.7
+  },
+  {
+    "index": 3,
+    "key": "vinnoe",
+    "name": "с. Винное",
+    "file": "04_Винное_домохозяйства.png",
+    "W": 6971,
+    "H": 7039,
+    "mpp": 0.383,
+    "n_buildings_total": 705,
+    "n_households": 695,
+    "official": 490,
+    "offset_px": [
+      0,
+      0
+    ],
+    "align_score": 2.513,
+    "size_mb": 84.9
+  },
+  {
+    "index": 4,
+    "key": "prigorodnoe",
+    "name": "с. Пригородное",
+    "file": "05_Пригородное_домохозяйства.png",
+    "W": 5202,
+    "H": 6441,
+    "mpp": 0.381,
+    "n_buildings_total": 376,
+    "n_households": 337,
+    "official": 365,
+    "offset_px": [
+      -10,
+      0
+    ],
+    "align_score": 2.395,
+    "size_mb": 52.2
+  },
+  {
+    "index": 5,
+    "key": "altaisky",
+    "name": "с. Алтайский",
+    "file": "06_Алтайский_домохозяйства.png",
+    "W": 4857,
+    "H": 8710,
+    "mpp": 0.382,
+    "n_buildings_total": 276,
+    "n_households": 274,
+    "official": 716,
+    "offset_px": [
+      8,
+      4
+    ],
+    "align_score": 2.389,
+    "size_mb": 64.0
+  }
+]

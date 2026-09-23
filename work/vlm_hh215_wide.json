@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "```json\n{\n  \"n_properties\": 2,\n  \"fence_between\": true,\n  \"fence_extends\": true,\n  \"evidence\": \"Внутри контура два отдельных строения с разными крышами (тёмно-серая слева, светло-серая/белая справа), разделённые чёткой вертикальной линией стыка стен. Эта линия продолжается за пределы крыш вглубь двора в виде межевого забора/разделителя. У каждого строения есть свой выход/доступ к улице. Типичная структура сблокированных домов разных владельцев.\"\n}\n```",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1789740995,
+  "id": "2026091822163264e2347574a84a08",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "2026091822163264e2347574a84a08",
+  "usage": {
+    "completion_tokens": 142,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1166,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1308
+  }
+}

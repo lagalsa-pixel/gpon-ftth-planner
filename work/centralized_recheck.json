@@ -1,0 +1,412 @@
+{
+ "recheck": {
+  "all_match": true,
+  "villages": [
+   {
+    "key": "verhneberezovka",
+    "name": "Верхнеберезовка",
+    "dhx": 799,
+    "couplers": 381,
+    "feeder_km": 25.93,
+    "fiber_km": 1884.7,
+    "total_cable_km": 38.241,
+    "km_by_size": {
+     "8": 11.396,
+     "12": 2.187,
+     "16": 1.386,
+     "24": 2.53,
+     "32": 1.642,
+     "48": 3.071,
+     "64": 1.329,
+     "72": 0.493,
+     "96": 14.208
+    },
+    "top_fibers": 972,
+    "max_parallel": 11,
+    "decomp": {
+     "base": 1390.2,
+     "reserve": 1749.7,
+     "min8": 1800.6,
+     "std": 1884.7
+    },
+    "tails": {
+     "cnt": 2546,
+     "km": 10.78,
+     "fiber_km": 86.2
+    },
+    "zero_edges": {
+     "cnt": 0.0,
+     "km": 0.0
+    },
+    "routes": {
+     "avg_m": 1740.0,
+     "avg_km": 1.74,
+     "med_m": 1819.0,
+     "p90_m": 2827.1,
+     "max_m": 3500.9
+    },
+    "unmapped": []
+   },
+   {
+    "key": "solnechnoe",
+    "name": "Солнечное",
+    "dhx": 112,
+    "couplers": 70,
+    "feeder_km": 4.47,
+    "fiber_km": 90.3,
+    "total_cable_km": 4.47,
+    "km_by_size": {
+     "8": 2.201,
+     "12": 0.409,
+     "16": 0.326,
+     "24": 0.637,
+     "32": 0.453,
+     "48": 0.037,
+     "64": 0.253,
+     "96": 0.154
+    },
+    "top_fibers": 92,
+    "max_parallel": 1,
+    "decomp": {
+     "base": 56.4,
+     "reserve": 72.4,
+     "min8": 81.2,
+     "std": 90.3
+    },
+    "tails": {
+     "cnt": 507,
+     "km": 2.09,
+     "fiber_km": 16.7
+    },
+    "zero_edges": {
+     "cnt": 0.0,
+     "km": 0.0
+    },
+    "routes": {
+     "avg_m": 503.8,
+     "avg_km": 0.5,
+     "med_m": 494.7,
+     "p90_m": 810.9,
+     "max_m": 991.6
+    },
+    "unmapped": []
+   },
+   {
+    "key": "perevalnoe",
+    "name": "Перевальное",
+    "dhx": 350,
+    "couplers": 162,
+    "feeder_km": 10.11,
+    "fiber_km": 537.9,
+    "total_cable_km": 12.493,
+    "km_by_size": {
+     "8": 3.775,
+     "12": 0.99,
+     "16": 0.485,
+     "24": 1.24,
+     "32": 0.732,
+     "48": 0.662,
+     "64": 0.912,
+     "72": 0.422,
+     "96": 3.274
+    },
+    "top_fibers": 438,
+    "max_parallel": 5,
+    "decomp": {
+     "base": 387.7,
+     "reserve": 488.8,
+     "min8": 503.1,
+     "std": 537.9
+    },
+    "tails": {
+     "cnt": 853,
+     "km": 3.58,
+     "fiber_km": 28.6
+    },
+    "zero_edges": {
+     "cnt": 0.0,
+     "km": 0.0
+    },
+    "routes": {
+     "avg_m": 1107.7,
+     "avg_km": 1.11,
+     "med_m": 1129.1,
+     "p90_m": 1811.3,
+     "max_m": 2469.1
+    },
+    "unmapped": []
+   },
+   {
+    "key": "vinnoe",
+    "name": "Винное",
+    "dhx": 550,
+    "couplers": 255,
+    "feeder_km": 17.12,
+    "fiber_km": 1086.7,
+    "total_cable_km": 22.765,
+    "km_by_size": {
+     "8": 7.033,
+     "12": 1.192,
+     "16": 0.781,
+     "24": 2.081,
+     "32": 0.975,
+     "48": 1.437,
+     "64": 0.816,
+     "72": 0.415,
+     "96": 8.036
+    },
+    "top_fibers": 687,
+    "max_parallel": 8,
+    "decomp": {
+     "base": 787.1,
+     "reserve": 991.3,
+     "min8": 1020.6,
+     "std": 1086.7
+    },
+    "tails": {
+     "cnt": 1510,
+     "km": 6.42,
+     "fiber_km": 51.4
+    },
+    "zero_edges": {
+     "cnt": 0.0,
+     "km": 0.0
+    },
+    "routes": {
+     "avg_m": 1433.7,
+     "avg_km": 1.43,
+     "med_m": 1362.4,
+     "p90_m": 2474.1,
+     "max_m": 3655.9
+    },
+    "unmapped": [
+     23
+    ]
+   },
+   {
+    "key": "prigorodnoe",
+    "name": "Пригородное",
+    "dhx": 244,
+    "couplers": 122,
+    "feeder_km": 7.39,
+    "fiber_km": 491.2,
+    "total_cable_km": 10.209,
+    "km_by_size": {
+     "8": 3.295,
+     "12": 0.626,
+     "16": 0.444,
+     "24": 0.508,
+     "32": 0.504,
+     "48": 0.428,
+     "64": 0.646,
+     "72": 0.025,
+     "96": 3.732
+    },
+    "top_fibers": 304,
+    "max_parallel": 4,
+    "decomp": {
+     "base": 359.4,
+     "reserve": 452.4,
+     "min8": 465.1,
+     "std": 491.2
+    },
+    "tails": {
+     "cnt": 652,
+     "km": 2.76,
+     "fiber_km": 22.1
+    },
+    "zero_edges": {
+     "cnt": 0.0,
+     "km": 0.0
+    },
+    "routes": {
+     "avg_m": 1473.1,
+     "avg_km": 1.47,
+     "med_m": 1491.8,
+     "p90_m": 2479.3,
+     "max_m": 2721.0
+    },
+    "unmapped": []
+   },
+   {
+    "key": "altaiskiy",
+    "name": "Алтайский",
+    "dhx": 279,
+    "couplers": 150,
+    "feeder_km": 8.06,
+    "fiber_km": 284.3,
+    "total_cable_km": 8.735,
+    "km_by_size": {
+     "8": 3.844,
+     "12": 0.668,
+     "16": 0.373,
+     "24": 0.519,
+     "32": 0.422,
+     "48": 0.498,
+     "64": 0.888,
+     "72": 0.551,
+     "96": 0.971
+    },
+    "top_fibers": 245,
+    "max_parallel": 3,
+    "decomp": {
+     "base": 194.6,
+     "reserve": 246.6,
+     "min8": 261.8,
+     "std": 284.3
+    },
+    "tails": {
+     "cnt": 805,
+     "km": 3.4,
+     "fiber_km": 27.2
+    },
+    "zero_edges": {
+     "cnt": 0.0,
+     "km": 0.0
+    },
+    "routes": {
+     "avg_m": 697.5,
+     "avg_km": 0.7,
+     "med_m": 641.0,
+     "p90_m": 1277.0,
+     "max_m": 1892.7
+    },
+    "unmapped": []
+   }
+  ],
+  "totals": {
+   "fiber_km": 4375.1,
+   "decomp": {
+    "base": 3175.4,
+    "reserve": 4001.2,
+    "min8": 4132.4,
+    "std": 4375.1
+   },
+   "tails": {
+    "cnt": 6873,
+    "km": 29.0,
+    "fiber_km": 232.2
+   },
+   "zero_edges": {
+    "cnt": 0,
+    "km": 0.0
+   },
+   "avg_route_m": 1361.0,
+   "top_fibers": 972
+  }
+ },
+ "installed_with_margin": {
+  "A_centr": 4929.0,
+  "B_cascade88": 1460.0,
+  "C_cascade416": 1021.0
+ },
+ "cost": {
+  "coeffs": {
+   "cable_k": 0.5,
+   "mufta": 0.125,
+   "por_box": 0.25,
+   "spl4": 0.045,
+   "spl8": 0.055,
+   "spl16": 0.09,
+   "spl64": 0.22,
+   "splice": 0.005,
+   "conn": 0.007,
+   "orsh_port": 0.02,
+   "olt_port": 0.4,
+   "suspend": 0.008,
+   "pigtail": 0.004
+  },
+  "base": {
+   "A_centr": {
+    "cable": 233.03186168447252,
+    "drop": 47.9,
+    "hw": {
+     "mufty": 142.5,
+     "splitters": 8.58,
+     "splices": 25.68,
+     "conns": 17.983,
+     "orsh_ports": 72.0,
+     "olt": 15.600000000000001,
+     "suspend": 23.288,
+     "pigtails": 9.336
+    },
+    "total": 595.8988616844724,
+    "fiber_km": 4375.1
+   },
+   "B_cascade88": {
+    "cable": 107.03636441243562,
+    "drop": 85.35,
+    "hw": {
+     "mufty": 14.375,
+     "por_boxes": 128.75,
+     "splitters1": 3.63,
+     "splitters2": 28.325,
+     "splices": 12.925,
+     "conns": 35.952,
+     "orsh_ports": 20.16,
+     "olt": 26.400000000000002,
+     "suspend": 33.44,
+     "pigtails": 2.2840000000000003
+    },
+    "total": 498.6273644124356,
+    "fiber_km": 1256.1
+   },
+   "C_cascade416": {
+    "cable": 88.86848457831834,
+    "drop": 122.0,
+    "hw": {
+     "mufty": 12.5,
+     "por_boxes": 80.75,
+     "splitters1": 3.735,
+     "splitters2": 29.07,
+     "splices": 7.76,
+     "conns": 35.952,
+     "orsh_ports": 17.28,
+     "olt": 33.2,
+     "suspend": 49.088,
+     "pigtails": 1.432
+    },
+    "total": 481.63548457831837,
+    "fiber_km": 889.2
+   }
+  },
+  "sensitivity": {
+   "0.0": {
+    "A_centr": 520.2,
+    "B_cascade88": 553.4,
+    "C_cascade416": 585.9
+   },
+   "0.3": {
+    "A_centr": 545.2,
+    "B_cascade88": 510.5,
+    "C_cascade416": 511.9
+   },
+   "0.4": {
+    "A_centr": 566.3,
+    "B_cascade88": 502.9,
+    "C_cascade416": 495.1
+   },
+   "0.5": {
+    "A_centr": 595.9,
+    "B_cascade88": 498.6,
+    "C_cascade416": 481.6
+   },
+   "0.6": {
+    "A_centr": 635.7,
+    "B_cascade88": 497.6,
+    "C_cascade416": 471.3
+   },
+   "0.7": {
+    "A_centr": 688.0,
+    "B_cascade88": 500.1,
+    "C_cascade416": 464.0
+   },
+   "1.0": {
+    "A_centr": 955.0,
+    "B_cascade88": 531.4,
+    "C_cascade416": 459.4
+   }
+  },
+  "breakeven_k": 0.157
+ }
+}
