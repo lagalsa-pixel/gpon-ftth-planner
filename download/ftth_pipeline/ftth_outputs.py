@@ -17,8 +17,16 @@ import os
 import subprocess
 import sys
 import time
+import importlib.util
 from collections import defaultdict
 from datetime import date
+
+# Task 50: интуитивные обозначения ЦУ/OLT и ОРШ (общий модуль с 48b)
+_spec50 = importlib.util.spec_from_file_location(
+    'sym50', '/home/z/my-project/scripts/50_map_symbology.py')
+_sym50 = importlib.util.module_from_spec(_spec50)
+_spec50.loader.exec_module(_sym50)
+draw_olt_node, draw_orsh = _sym50.draw_olt_node, _sym50.draw_orsh
 
 from PIL import Image, ImageDraw, ImageFont
 Image.MAX_IMAGE_PIXELS = None
@@ -259,13 +267,18 @@ def render_village_map(ctx, v):
     f_z1 = fnt(max(26, round(34 * k)))
     f_z2 = fnt(max(20, round(26 * k)), bold=False)
     labels = Labels()
+    # Task 50: зоны маркеров не перекрываются подписями (иконки стали выше)
     for c in order:
+        mx_, my_ = T(c)
+        r_ = 24 * k
+        labels.boxes.append((mx_ - r_, my_ - r_, mx_ + r_, my_ + r_))
+    _ax0, _ay0 = T((net['anchor']['x'], net['anchor']['y']))
+    _R0 = 40 * k
+    labels.boxes.append((_ax0 - _R0, _ay0 - _R0, _ax0 + _R0, _ay0 + _R0))
+    for zi, c in enumerate(order):
         col = zcolor[c]
         x, y = T(c)
-        s1, s2 = 17 * k, 14 * k
-        dr.rectangle([x - s1, y - s1, x + s1, y + s1], fill=(20, 20, 25, 235))
-        dr.rectangle([x - s2, y - s2, x + s2, y + s2], fill=col + (255,),
-                     outline=(255, 255, 255, 255), width=max(2, round(4 * k)))
+        draw_orsh(dr, x, y, 16 * k, col, zi + 1)     # Task 50: шкаф с номером зоны
         name = zname[c]
         dh = zone_dh[c]
         tw = max(dr.textlength(name, font=f_z1), dr.textlength(f'{dh} ДХ', font=f_z2))
@@ -281,17 +294,9 @@ def render_village_map(ctx, v):
                     stroke_width=max(2, round(3 * k)), stroke_fill=(15, 15, 15, 255))
 
     ax, ay = T((net['anchor']['x'], net['anchor']['y']))
-    R = 30 * k
-    dr.ellipse([ax - R, ay - R, ax + R, ay + R], fill=(255, 255, 255, 90),
-               outline=(255, 255, 255, 255), width=max(3, round(5 * k)))
-    pts = []
-    for i in range(10):
-        r = R * (0.55 if i % 2 else 1.0)
-        a = -math.pi / 2 + i * math.pi / 5
-        pts.append((ax + r * math.cos(a), ay + r * math.sin(a)))
-    dr.polygon(pts, fill=(255, 40, 40, 255), outline=(255, 255, 255, 255))
+    draw_olt_node(dr, ax, ay, 30 * k)                # Task 50: здание + антенна + бейдж OLT
     f_cu = fnt(max(26, round(34 * k)))
-    t1 = 'ЦУ — ОРШ (единый узел OLT)'
+    t1 = 'ЦУ · OLT — центральный узел села'
     t2 = f"корневая зона: {zone_dh[t.root]} ДХ"
     pos = labels.place(ax, ay, int(dr.textlength(t1, font=f_cu)), f_cu.size + f_z2.size, W, H)
     if pos:
@@ -370,14 +375,12 @@ def render_village_map(ctx, v):
     ld.rectangle([30, yy - 9, 42, yy + 9], fill=PALETTE[2], outline=(25, 25, 25))
     ld.text((64, yy - 15), 'домохозяйство (цвет его зоны)', font=fl_r, fill=(228, 232, 238))
     yy += 52
-    ld.rectangle([24, yy - 15, 48, yy + 15], fill=(20, 20, 25))
-    ld.rectangle([27, yy - 12, 45, yy + 12], fill=PALETTE[3], outline=(255, 255, 255), width=3)
-    ld.text((64, yy - 15), 'зонный ОРШ — шкаф уличный (в муфте ветвления)',
+    draw_orsh(ld, 36, yy, 14, PALETTE[3], 1)
+    ld.text((64, yy - 15), 'зонный ОРШ-N — уличный шкаф (номер зоны на шкафе)',
             font=fl_r, fill=(228, 232, 238))
     yy += 52
-    ld.ellipse([28, yy - 15, 44, yy + 15], outline=(255, 255, 255), width=3)
-    ld.polygon([(36 - 5, yy), (33, yy - 9), (39, yy - 9)], fill=(255, 40, 40))
-    ld.text((64, yy - 15), 'ЦУ — ОРШ села, точка входа фидера (единый OLT)',
+    draw_olt_node(ld, 36, yy, 14)
+    ld.text((64, yy - 15), 'ЦУ · OLT — центральный узел: станция OLT, вход магистрали',
             font=fl_r, fill=(228, 232, 238))
 
     # --- авто-размещение легенды: 5 позиций по минимуму взвешенного перекрытия ---

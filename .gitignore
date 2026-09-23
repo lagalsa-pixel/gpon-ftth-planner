@@ -7,3 +7,7 @@ node_modules/
 
 # Релизный zip >100 МБ (лимит git-блока GitHub) — загружен как актив GitHub Release
 download/Карты_зон_ОРШ_схема_D_ВКО.zip
+
+# Тест Топольного: регенерируемые тяжёлые артефакты (мозаика/тайлы пересобираются из кэша)
+work/topolnoe_test/work/topolnoe/mosaic.jpg
+work/topolnoe_test/work/tiles/

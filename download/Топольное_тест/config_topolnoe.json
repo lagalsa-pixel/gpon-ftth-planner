@@ -1,0 +1,30 @@
+{
+  "project": "Топольное_тест_генерализации",
+  "root": "/home/z/my-project/work/topolnoe_test",
+  "params": {
+    "s_min_km": 15,
+    "min_zone_dh": 48,
+    "ob_budget_db": 28.0,
+    "ob_margin_min_db": 3.0
+  },
+  "villages": [
+    {
+      "num": "07",
+      "key": "topolnoe",
+      "name": "Топольное",
+      "raion": "Угловский район",
+      "so": "Тополинский сельсовет, Алтайский край",
+      "lat": 50.93801,
+      "lon": 80.10807,
+      "radius_m": 2000,
+      "zone": {
+        "type": "bbox"
+      },
+      "cv_supplement": "on",
+      "force_anchor": null,
+      "bbox_lock": null,
+      "crop_image": "/home/z/my-project/upload/Топольное_northup.jpg",
+      "net": null
+    }
+  ]
+}

@@ -153,8 +153,10 @@ class Ctx:
         os.makedirs(d, exist_ok=True)
         return d
 
-    def P(self, name):
-        return self.params[name]
+    def P(self, name, default=None):
+        """Параметр пайплайна; default — если параметр не задан (v2.4:
+        вызовы hh_refine/hh_split_no_vlm/hh_vlm_verify передают default)."""
+        return self.params.get(name, default)
 
 
 def save_json(path, obj):
@@ -676,6 +678,7 @@ def road_points_px(roads, west, north, mpp, W, H, step_m=15.0):
 # фасада / стык). Если VLM недоступен — только детерминированные C-кандидаты
 # (tier 1), A/B записываются в hh2_pending.json.
 HH2_MIN_BBOX_M2 = 165.0     # «увеличенные размеры» (больше типового дома)
+HH2_MIN_POLY_M2 = 80.0      # полигон A-сплита должен вмещать 2 дома (2 x 40 м²)
 HH2_MIN_LONG_M = 12.5       # длинная сторона (фасад)
 HH2_CENTER_T0, HH2_CENTER_T1 = 0.38, 0.62
 HH2_MIN_PART_M2 = 36.0      # обе части — дом-размера
@@ -1351,7 +1354,8 @@ def build_network(key, osm, hhs, anchor, geo, mpp, P, bounds=None, verbose=True)
 
     ax, ay = anchor['x'], anchor['y']
 
-    Pt, tree, C, allowed = build_road_graph(osm, geo, mpp, P, bounds)
+    _rg = build_road_graph(osm, geo, mpp, P, bounds)
+    Pt, tree, C, allowed = _rg['P'], _rg['kdt'], _rg['C'], _rg['allowed']
     n = len(Pt)
     if verbose:
         print(f'  граф: {n} узлов, {C.nnz // 2} рёбер')

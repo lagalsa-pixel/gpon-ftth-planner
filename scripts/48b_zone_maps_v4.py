@@ -37,6 +37,8 @@ def load_mod(name, path):
 
 de28 = load_mod('de28', f'{BASE}/scripts/28_decentral_explore.py')
 de46 = load_mod('de46', f'{BASE}/scripts/46_topology_v3.py')
+sym50 = load_mod('sym50', f'{BASE}/scripts/50_map_symbology.py')
+draw_olt_node, draw_orsh = sym50.draw_olt_node, sym50.draw_orsh
 Tree, nkey = de28.Tree, de28.nkey
 
 DBOOK = json.load(open(f'{BASE}/work/boq_decentral_data_v4.json', encoding='utf-8'))
@@ -300,13 +302,10 @@ def render_village(key):
     ax0, ay0 = T((net['anchor']['x'], net['anchor']['y']))
     R0 = S(42)
     labels.boxes.append((ax0 - R0, ay0 - R0, ax0 + R0, ay0 + R0))
-    for c in order:
+    for zi, c in enumerate(order):
         col = zcolor[c]
         x, y = T(med_model[c])
-        r1, r2 = S(17), S(14)
-        dr.rectangle([x - r1, y - r1, x + r1, y + r1], fill=(20, 20, 25, 235))
-        dr.rectangle([x - r2, y - r2, x + r2, y + r2], fill=col + (255,),
-                     outline=(255, 255, 255, 255), width=S(4))
+        draw_orsh(dr, x, y, S(16), col, zi + 1)      # Task 50: шкаф с номером зоны
         name = zname[c]
         dh_ = zone_dh[c]
         tw = max(dr.textlength(name, font=f_z1), dr.textlength(f'{dh_} ДХ', font=f_z2))
@@ -321,19 +320,11 @@ def render_village(key):
             dr.text((bx, by + S(36)), f'{dh_} ДХ', font=f_z2, fill=(255, 235, 180, 255),
                     stroke_width=S(3), stroke_fill=(15, 15, 15, 255))
 
-    # 8) ЦУ
+    # 8) ЦУ — узел OLT (Task 50: здание с антенной и бейджем OLT)
     ax, ay = T((net['anchor']['x'], net['anchor']['y']))
-    R = S(30)
-    dr.ellipse([ax - R, ay - R, ax + R, ay + R], fill=(255, 255, 255, 90),
-               outline=(255, 255, 255, 255), width=S(5))
-    pts = []
-    for i in range(10):
-        r = R * (0.55 if i % 2 else 1.0)
-        a = -math.pi / 2 + i * math.pi / 5
-        pts.append((ax + r * math.cos(a), ay + r * math.sin(a)))
-    dr.polygon(pts, fill=(255, 40, 40, 255), outline=(255, 255, 255, 255))
+    draw_olt_node(dr, ax, ay, S(30))
     f_cu = fnt(S(34))
-    t1 = 'ЦУ — ОРШ (единый узел OLT)'
+    t1 = 'ЦУ · OLT — центральный узел села'
     t2 = f"корневая зона: {zone_dh[t.root]} ДХ"
     pos = labels.place(ax, ay, int(dr.textlength(t1, font=f_cu)), S(34) + S(28), W, H)
     if pos:
@@ -475,15 +466,12 @@ def render_village(key):
     ld.text((S(64), yy - S(15)), 'домохозяйство (цвет его зоны)', font=fl_r,
             fill=(228, 232, 238))
     yy += S(52)
-    ld.rectangle([S(24), yy - S(15), S(48), yy + S(15)], fill=(20, 20, 25))
-    ld.rectangle([S(27), yy - S(12), S(45), yy + S(12)], fill=PALETTE[3],
-                 outline=(255, 255, 255), width=S(3))
-    ld.text((S(64), yy - S(15)), 'зонный ОРШ — шкаф уличный (в центре сектора зоны)',
+    draw_orsh(ld, S(36), yy, S(14), PALETTE[3], 1)
+    ld.text((S(64), yy - S(15)), 'зонный ОРШ-N — уличный шкаф (номер зоны на шкафе, в центре сектора)',
             font=fl_r, fill=(228, 232, 238))
     yy += S(52)
-    ld.ellipse([S(28), yy - S(15), S(44), yy + S(15)], outline=(255, 255, 255), width=S(3))
-    ld.polygon([(S(36) - S(5), yy), (S(33), yy - S(9)), (S(39), yy - S(9))], fill=(255, 40, 40))
-    ld.text((S(64), yy - S(15)), 'ЦУ — ОРШ села, точка входа фидера (единый OLT)',
+    draw_olt_node(ld, S(36), yy, S(14))
+    ld.text((S(64), yy - S(15)), 'ЦУ · OLT — центральный узел: станция OLT, вход магистрали',
             font=fl_r, fill=(228, 232, 238))
 
     canvas.paste(lg, lg_pos, lg)
