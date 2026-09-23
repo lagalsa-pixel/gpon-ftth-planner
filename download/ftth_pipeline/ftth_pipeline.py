@@ -802,35 +802,67 @@ def roof_split_info(mos, poly, mpp):
 
 
 def _hh2_vlm_available():
-    """VLM-верификация доступна? (один пробный вызов, кэш на процесс)"""
+    """VLM-верификация доступна? Вызовы идут через CLI `z-ai`, поэтому
+    доступность определяется наличием CLI (запасной вариант — python-спека
+    SDK; в v2.4 спека из python недоступна, из-за чего VLM не вызывался
+    вовсе — найдено при возобновлении Task 50). Сами вызовы ловим try/except."""
     global _HH2_VLM_CACHE
     if _HH2_VLM_CACHE is not None:
         return _HH2_VLM_CACHE
+    ok = False
     try:
-        import importlib.util
-        spec = importlib.util.find_spec('z-ai-web-dev-sdk')
-        if spec is None:
-            _HH2_VLM_CACHE = False
-            return False
-        _HH2_VLM_CACHE = True  # SDK есть; сами вызовы ловим try/except
+        import shutil
+        if shutil.which('z-ai'):
+            ok = True
     except Exception:
-        _HH2_VLM_CACHE = False
+        ok = False
+    if not ok:
+        try:
+            import importlib.util
+            ok = importlib.util.find_spec('z-ai-web-dev-sdk') is not None
+        except Exception:
+            ok = False
+    _HH2_VLM_CACHE = ok
     return _HH2_VLM_CACHE
 
 
 _HH2_VLM_CACHE = None
+_HH2_VLM_VERDICTS = None    # кэш вердиктов {md5(jpeg-кропа): n} — переживает прогоны
+_HH2_VLM_CACHE_FILE = None  # <vdir>/vlm_verdicts.json; ставится в refine_households
+
+
+def _hh2_vlm_save_cache():
+    """Атомарное сохранение кэша вердиктов (tmp+rename)."""
+    if not _HH2_VLM_CACHE_FILE or _HH2_VLM_VERDICTS is None:
+        return
+    try:
+        tmp = _HH2_VLM_CACHE_FILE + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(_HH2_VLM_VERDICTS, f)
+        os.replace(tmp, _HH2_VLM_CACHE_FILE)
+    except Exception:
+        pass
 
 
 def _hh2_vlm_nproperties(crop_rgb, note=''):
-    """Вопрос VLM: сколько владений на кропе. None = сервис недоступен."""
+    """Вопрос VLM: сколько владений на кропе. None = сервис недоступен.
+    Вердикты кэшируются по md5 кропа (переживают прогоны и обрывы квоты;
+    повторные запросы того же здания — бесплатно)."""
     try:
         import cv2
         import re
         import subprocess, tempfile, os as _os
+        ok, buf = cv2.imencode('.jpg', crop_rgb, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        if not ok:
+            return None
+        key = hashlib.md5(buf.tobytes()).hexdigest()
+        if _HH2_VLM_VERDICTS is not None and key in _HH2_VLM_VERDICTS:
+            return _HH2_VLM_VERDICTS[key]
         with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
-            cv2.imwrite(f.name, crop_rgb, [cv2.IMWRITE_JPEG_QUALITY, 88])
+            f.write(buf.tobytes())
             path = f.name
         try:
+            time.sleep(0.6)  # щадящий темп (без кэша — только реальные вызовы)
             prompt = ('Спутниковый снимок села (Восточный Казахстан, ~0.4 м/px). '
                       'Красный контур — строение по геоданным; вокруг — дворы, '
                       'заборы, соседние участки. Признаки ДВУХ и более владений: '
@@ -850,9 +882,12 @@ def _hh2_vlm_nproperties(crop_rgb, note=''):
             if not (js and 'n_properties' in js):
                 return None
             # гейт Task 46: пристройка без забора — не владение
-            if js.get('annex') and not js.get('fence_between'):
-                return 1
-            return int(js['n_properties'])
+            n = 1 if (js.get('annex') and not js.get('fence_between')) \
+                else int(js['n_properties'])
+            if _HH2_VLM_VERDICTS is not None:
+                _HH2_VLM_VERDICTS[key] = n
+                _hh2_vlm_save_cache()
+            return n
         finally:
             _os.unlink(path)
     except Exception:
@@ -866,6 +901,16 @@ def refine_households(ctx, v, households, yard_map, all_blds, mos, mpp, west, no
     next_id = max(hh_by_id) + 1
     n_split = n_apt = pending = 0
     use_vlm = ctx.P('hh_vlm_verify', True) and _hh2_vlm_available()
+    # кэш вердиктов по md5 кропа: переживает прогоны/обрывы квоты (Task 50)
+    global _HH2_VLM_VERDICTS, _HH2_VLM_CACHE_FILE
+    _HH2_VLM_CACHE_FILE = os.path.join(ctx.vdir(v['key']), 'vlm_verdicts.json')
+    if _HH2_VLM_VERDICTS is None:
+        try:
+            with open(_HH2_VLM_CACHE_FILE, encoding='utf-8') as f:
+                _HH2_VLM_VERDICTS = json.load(f)
+            print(f'  VLM: кэш вердиктов {len(_HH2_VLM_VERDICTS)} шт.')
+        except Exception:
+            _HH2_VLM_VERDICTS = {}
 
     def crop_for(b, pad_m=35.0):
         xs = [p[0] for p in b['poly']]; ys = [p[1] for p in b['poly']]
