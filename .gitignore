@@ -9,6 +9,5 @@ node_modules/
 download/Карты_зон_ОРШ_схема_D_ВКО.zip
 
 # Тяжёлые слои бэкапа — подключаются отдельными коммитами (см. README.md)
-upload/
 download/snp_vko/
 download/ftth_pipeline/
