@@ -1,0 +1,12 @@
+{
+  "project": "ВКО_тест",
+  "root": "/home/z/my-project",
+  "villages": [
+    {"num": "01", "key": "verhneberezovka", "name": "Верхнеберезовка", "raion": "Глубоковский р-н", "so": "Верхнеберезовский с.о.", "lat": 50.28420545, "lon": 82.20951200, "hh": 940, "net": "network.json"},
+    {"num": "02", "key": "solnechnoe", "name": "Солнечное", "raion": "Глубоковский р-н", "so": "Бобровский с.о.", "lat": 50.05177550, "lon": 82.71438134, "hh": 366, "net": "network_v2.json"},
+    {"num": "03", "key": "perevalnoe", "name": "Перевальное", "raion": "Глубоковский р-н", "so": "Красноярский с.о.", "lat": 50.24139084, "lon": 82.28314297, "hh": 339, "net": "network_v2.json"},
+    {"num": "04", "key": "vinnoe", "name": "Винное", "raion": "Глубоковский р-н", "so": "Тарханский с.о.", "lat": 50.05844487, "lon": 82.82687999, "hh": 490, "net": "network_v2.json"},
+    {"num": "05", "key": "prigorodnoe", "name": "Пригородное", "raion": "г. Риддер", "so": "—", "lat": 50.32198100, "lon": 83.52094976, "hh": 365, "net": "network_v2.json"},
+    {"num": "06", "key": "altaiskiy", "name": "Алтайский", "raion": "Глубоковский р-н", "so": "Алтайский с.о.", "lat": 50.24399825, "lon": 82.36103064, "hh": 716, "net": "network_v2.json"}
+  ]
+}

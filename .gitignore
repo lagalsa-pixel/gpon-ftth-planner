@@ -7,7 +7,3 @@ node_modules/
 
 # Релизный zip >100 МБ (лимит git-блока GitHub) — загружен как актив GitHub Release
 download/Карты_зон_ОРШ_схема_D_ВКО.zip
-
-# Тяжёлые слои бэкапа — подключаются отдельными коммитами (см. README.md)
-download/snp_vko/
-download/ftth_pipeline/

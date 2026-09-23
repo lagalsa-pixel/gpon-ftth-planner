@@ -1,0 +1,9 @@
+{
+  "project": "Бобровка_тест",
+  "root": "/home/z/my-project/work/bobrovka_test",
+  "villages": [
+    {"num": "01", "key": "bobrovka", "name": "Бобровка", "raion": "Глубоковский р-н", "so": "Бобровский с.о.",
+     "lat": 50.1677890, "lon": 82.7206420, "hh": 900, "radius_m": 2600,
+     "zone": {"type": "bbox"}, "cv_supplement": "auto"}
+  ]
+}
