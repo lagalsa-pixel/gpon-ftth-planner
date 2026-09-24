@@ -877,8 +877,29 @@ def _hh2_vlm_nproperties(crop_rgb, note=''):
             r = subprocess.run(['z-ai', 'vision', '-p', prompt, '-i', path],
                                capture_output=True, text=True, timeout=120)
             import json as _json
-            m = re.search(r'\{[^{}]*\}', r.stdout, re.S)
-            js = _json.loads(m.group(0)) if m else None
+            # CLI печатает служебные строки + JSON-обёртку ответа; достаём
+            # content модели, затем в нём ищем объект с n_properties
+            # (Task 50-resume2: прежде regex цеплял объект message обёртки,
+            #  n_properties не находился и VLM молча отключался на 1-м вызове)
+            txt = (r.stdout or '').strip()
+            content = None
+            if r.returncode == 0 and txt:
+                try:
+                    i, j = txt.index('{'), txt.rindex('}')
+                    outer = _json.loads(txt[i:j + 1])
+                    content = outer['choices'][0]['message']['content']
+                except Exception:
+                    content = txt
+            js = None
+            if content:
+                for m in re.finditer(r'\{[^{}]*\}', content, re.S):
+                    try:
+                        cand = _json.loads(m.group(0))
+                    except Exception:
+                        continue
+                    if isinstance(cand, dict) and 'n_properties' in cand:
+                        js = cand
+                        break
             if not (js and 'n_properties' in js):
                 return None
             # гейт Task 46: пристройка без забора — не владение
