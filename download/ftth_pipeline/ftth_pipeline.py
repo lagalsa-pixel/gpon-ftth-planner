@@ -89,6 +89,11 @@ DEFAULTS = dict(
     net_dedup_m=15.0,           # дедупликация муфт по дереву
     net_max_drop_m=120.0,       # длина дропа, после которой ставится промежуточная муфта
     net_intermediate_m=100.0,   # шаг промежуточной муфты
+    net_detour_eps=0.30,        # Task 52: детур-гард ствола — порог ratio (1+eps)
+                                # к кратчайшему пути по дорогам
+    net_detour_min_m=100.0,     # Task 52: минимальный абсолютный перерасход, м
+    net_drop_shortest=True,     # Task 52: дропы — кратчайшими уличными путями
+                                # от ближайшей по дорогам муфты (не по дереву)
     # --- оптический бюджет (v2.4; Task 48 — сверка с отраслевыми материалами:
     #     foxes-com «Методика построения xPON», prorostelecom «Построение сети
     #     GPON»: расчёт бюджета потерь — обязательный этап проектирования PON) ---
@@ -1951,6 +1956,48 @@ def build_network(key, osm, hhs, anchor, geo, mpp, P, bounds=None, verbose=True)
                 break
             union.add((min(p, cur), max(p, cur)))
             cur = p
+
+    # --- Task 52: детур-гард ствола ----------------------------------------
+    # Дерево Штайнера (MST в метрическом замыкании) минимизирует СУММАРНУЮ
+    # длину, но отдельные маршруты ЦУ->ДХ могут быть в разы длиннее
+    # кратчайшего пути по улицам (замеры: Топольное медиана 1.16/max 2.0,
+    # Алтайский ВКО медиана 1.27/max 9.9). Добавляем в граф объединения
+    # кратчайшие пути терминалов с заметным обходом (ratio > 1+eps И
+    # перерасход > min_m): маршруты становятся практически кратчайшими,
+    # разделение кабеля на общих участках сохраняется. Один проход
+    # достаточен: после добавления путей нарушителей их расстояния
+    # становятся точными, остальные не ухудшаются.
+    DET_EPS, DET_MIN_M = P('net_detour_eps'), P('net_detour_min_m')
+    if DET_EPS is not None and DET_EPS >= 0 and len(terminals) > 1:
+        dC_root, predC_root = dijkstra(C, indices=root_id,
+                                       return_predecessors=True)
+        predC_root = predC_root.astype(np.int64)
+        _ur, _uc, _uv = [], [], []
+        for (u, w) in union:
+            l = math.hypot(Pt[u][0] - Pt[w][0], Pt[u][1] - Pt[w][1]) * mpp
+            _ur += [u, w]; _uc += [w, u]; _uv += [l, l]
+        U0 = csr_matrix((_uv, (_ur, _uc)), shape=(n, n))
+        dU0 = dijkstra(U0, indices=root_id)
+        n_fixed = 0
+        for t in terminals:
+            if t == root_id:
+                continue
+            dt, ds = dU0[t], dC_root[t]
+            if not np.isfinite(ds) or ds <= 1e-9 or not np.isfinite(dt):
+                continue
+            if dt > (1.0 + DET_EPS) * ds and (dt - ds) > DET_MIN_M:
+                cur = t
+                guard = 0
+                while cur != root_id and predC_root[cur] >= 0 and guard < n:
+                    p = int(predC_root[cur])
+                    union.add((min(p, cur), max(p, cur)))
+                    cur = p
+                    guard += 1
+                n_fixed += 1
+        if verbose and n_fixed:
+            print(f'  детур-гард: кратчайшие пути добавлены для {n_fixed} '
+                  f'терминалов (eps={DET_EPS}, min={DET_MIN_M:.0f} м)')
+
     ur, uc, uv = [], [], []
     elen = {}
     for (u, w) in union:
@@ -2039,58 +2086,180 @@ def build_network(key, osm, hhs, anchor, geo, mpp, P, bounds=None, verbose=True)
             if changed:
                 break
 
-    def serving(hi):
-        pth = hh_paths[hi]
-        for i in range(len(pth)):
-            if pth[i] in couplers:
-                return pth[i]
-        return root_id
+    # --- Task 52: обслуживание по ближайшим ПО ДОРОГАМ муфтам --------------
+    # Дроп — выделенное волокно: следовать дереву не обязательно. Для каждого
+    # ДХ выбирается муфта с минимальным расстоянием ПО УЛИЦАМ, дроп идёт
+    # кратчайшим уличным путём + дворовой заход. Если дроп длиннее
+    # net_max_drop_m, вдоль кратчайшей уличной трассы ставятся промежуточные
+    # муфты (≈net_intermediate_m от ДХ) и ствол продлевается по этой же
+    # трассе — магистраль больше не обходит квартал, чтобы «дотянуться»
+    # до дальнего дома (регрессия «неоптимальных трасс» Task 52).
+    DROP_SHORTEST = P('net_drop_shortest')
+    serving_map = {}
 
-    def drop_len(hi, sc):
-        pth = hh_paths[hi]
-        si = pth.index(sc)
-        return sum(elen.get((min(pth[i], pth[i + 1]), max(pth[i], pth[i + 1])), 0)
-                   for i in range(si))
+    def _elen_of(u, w):
+        return math.hypot(Pt[u][0] - Pt[w][0], Pt[u][1] - Pt[w][1]) * mpp
 
-    for hi in order:
-        pth = hh_paths[hi]
-        hh = hhs[hi]
-        a_h = pth[0]
-        yard = math.hypot(hh['cx'] - Pt[a_h][0], hh['cy'] - Pt[a_h][1]) * mpp
-        sc = serving(hi)
-        dl = drop_len(hi, sc) + yard
-        while dl > MAX_DROP_M:
-            acc = 0.0
-            placed = None
-            for i in range(len(pth) - 1):
-                acc += elen.get((min(pth[i], pth[i + 1]), max(pth[i], pth[i + 1])), 0)
-                if acc >= INTERM:
-                    placed = pth[i + 1]
-                    break
-            if placed is None or placed in couplers or placed == sc:
+    def _rebuild_pred():
+        """DU/predU по текущему множеству рёбер union (после продлений)."""
+        nonlocal DU, predU
+        _r, _c, _v = [], [], []
+        for (u, w) in union:
+            l = elen.get((u, w))
+            if l is None:
+                l = _elen_of(u, w)
+                elen[(u, w)] = l
+            _r += [u, w]; _c += [w, u]; _v += [l, l]
+        U2 = csr_matrix((_v, (_r, _c)), shape=(n, n))
+        DU, _pu = dijkstra(U2, indices=root_id, return_predecessors=True)
+        predU = _pu.astype(np.int64)
+        return U2
+
+    if not DROP_SHORTEST:
+        # прежняя логика (следование дереву) — для воспроизводимости старых
+        # прогонов: обслуживающая муфта = первая на пути дерева
+        def serving(hi):
+            pth = hh_paths[hi]
+            for i in range(len(pth)):
+                if pth[i] in couplers:
+                    return pth[i]
+            return root_id
+
+        for hi in order:
+            serving_map[hi] = serving(hi)
+    else:
+        for _round in range(3):
+            cand = sorted(set(list(couplers.keys()) + [root_id]))
+            row = {c: i for i, c in enumerate(cand)}
+            Dc, pc = dijkstra(C, indices=cand, return_predecessors=True)
+            pc = pc.astype(np.int64)
+            serving_map = {}
+            need_int = []
+            for hi in order:
+                a_h = hh_nodes[hi]
+                best, bd = None, None
+                for c in cand:
+                    d = Dc[row[c]][a_h]
+                    if np.isfinite(d) and (bd is None or d < bd - 1e-9):
+                        best, bd = c, float(d)
+                serving_map[hi] = best
+                if best is None:
+                    continue
+                hh = hhs[hi]
+                yard = math.hypot(hh['cx'] - Pt[a_h][0],
+                                  hh['cy'] - Pt[a_h][1]) * mpp
+                if bd + yard > MAX_DROP_M:
+                    need_int.append(hi)
+            if not need_int or _round == 2:
                 break
-            couplers.setdefault(placed, [])
-            sc = serving(hi)
-            dl2 = drop_len(hi, sc)
-            if dl2 >= dl:
-                break
-            dl = dl2 + yard
+            # промежуточные муфты вдоль кратчайшего уличного пути муфта->ДХ;
+            # ствол продлевается по этой трассе до муфты, ближайшей к ДХ
+            ext_any = False
+            for hi in need_int:
+                a_h = hh_nodes[hi]
+                sc = serving_map[hi]
+                r = row[sc]
+                # путь a_h -> sc по pred (обход от ДХ к муфте)
+                path = [a_h]
+                cur = a_h
+                g = 0
+                while cur != sc and pc[r][cur] >= 0 and g < n:
+                    cur = int(pc[r][cur])
+                    path.append(cur)
+                    g += 1
+                if cur != sc:
+                    continue
+                path.reverse()                       # sc -> ... -> a_h
+                # муфты ≈ INTERM от ДХ (идём от дома), не ближе 1 ребра к sc
+                acc = 0.0
+                first_c = None
+                for i in range(len(path) - 2, -1, -1):
+                    u, w = path[i], path[i + 1]
+                    acc += _elen_of(u, w)
+                    if acc >= INTERM and w != sc:
+                        couplers.setdefault(w, [])
+                        if first_c is None:
+                            first_c = w
+                        acc = 0.0
+                if first_c is None:
+                    continue
+                # продление ствола: sc -> ... -> first_c (муфта у ДХ)
+                fi = path.index(first_c)
+                for i in range(fi + 1):
+                    u, w = path[i], path[i + 1]
+                    k = (min(u, w), max(u, w))
+                    if k not in union:
+                        union.add(k)
+                        elen[k] = _elen_of(u, w)
+                        ext_any = True
+            if ext_any:
+                _rebuild_pred()
+
+        # синхронизация списков ДХ по муфтам из итогового обслуживания
+        for c in couplers:
+            couplers[c] = []
+        for hi, sc in serving_map.items():
+            if sc in couplers:
+                couplers[sc].append(hi)
+            elif sc == root_id:
+                couplers.setdefault(root_id, []).append(hi)
+        # чистка: пустые муфты, не являющиеся точками ветвления, удаляются
+        # (переназначение могло освободить их)
+        deg2 = {}
+        for (u, w) in union:
+            deg2[u] = deg2.get(u, 0) + 1
+            deg2[w] = deg2.get(w, 0) + 1
+        for c in list(couplers.keys()):
+            if not couplers[c] and deg2.get(c, 0) < 3:
+                del couplers[c]
+
+    # Дейкстра от муфт (один раз) для кратчайших уличных путей дропов
+    if DROP_SHORTEST:
+        cand_f = sorted(set(list(couplers.keys()) + [root_id]))
+        row_f = {c: i for i, c in enumerate(cand_f)}
+        _, pcF = dijkstra(C, indices=cand_f, return_predecessors=True)
+        pcF = pcF.astype(np.int64)
 
     drops = []
     for hi in range(len(hhs)):
         if hh_nodes[hi] is None or hh_paths.get(hi) is None:
             continue
-        pth = hh_paths[hi]
-        sc = serving(hi)
-        si = pth.index(sc)
-        poly = [list(Pt[pth[i]]) for i in range(si, -1, -1)]
-        a_h = pth[0]
+        a_h = hh_nodes[hi]
+        sc = serving_map.get(hi)
+        if sc is None:
+            pth = hh_paths[hi]
+            for i in range(len(pth)):
+                if pth[i] in couplers:
+                    sc = pth[i]
+                    break
+            if sc is None:
+                sc = root_id
+        if sc == a_h:
+            poly = [list(Pt[a_h])]
+        else:
+            sp = None
+            if DROP_SHORTEST and sc in row_f:
+                r = row_f[sc]
+                rev = [a_h]
+                cur = a_h
+                g = 0
+                while cur != sc and pcF[r][cur] >= 0 and g < n:
+                    cur = int(pcF[r][cur])
+                    rev.append(cur)
+                    g += 1
+                if cur == sc:
+                    sp = [list(Pt[j]) for j in reversed(rev)]
+            if sp is None:
+                # fallback: путь по дереву (старая геометрия)
+                pth = hh_paths[hi]
+                si = pth.index(sc) if sc in pth else 0
+                sp = [list(Pt[pth[i]]) for i in range(si, -1, -1)]
+            poly = sp
         entry = yard_polyline(hhs[hi], Pt[a_h], mpp)
-        poly += entry
-        dl = (sum(elen.get((min(pth[i], pth[i + 1]), max(pth[i], pth[i + 1])), 0)
-                  for i in range(si))
-              + sum(math.hypot(entry[k + 1][0] - entry[k][0],
-                               entry[k + 1][1] - entry[k][1]) for k in range(len(entry) - 1)) * mpp)
+        poly = poly + entry
+        dl = sum(math.hypot(poly[k + 1][0] - poly[k][0],
+                            poly[k + 1][1] - poly[k][1])
+                 for k in range(len(poly) - 1)) * mpp
         drops.append(dict(hh=hi, coupler=sc, poly=poly, length_m=round(dl, 1)))
 
     feeder_edges = set()

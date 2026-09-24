@@ -218,6 +218,13 @@ def render_village(key):
     print(f'  база {W}x{H}, k={k:.2f}, {mpp_new:.4f} м/px', flush=True)
 
     net = json.load(open(f"{BASE}/work/{key}/{v['net']}"))
+    # Task 52: защита от рендера не той сети (регрессия №6: карты Task 51
+    # отрисованы с network_v2 — молча потеряны ДХ уточнённой детекции:
+    # ВБ -230, Винное -72, Алтайский -49 ДХ). Сеть обязана соответствовать
+    # книге, на которой построены BoQ/сметы/KMZ.
+    assert len(net['drops']) == db['dhx_served'], (
+        f'{key}: {v["net"]} даёт {len(net["drops"])} дропов, а в книге '
+        f'{db["dhx_served"]} ДХ — запускать с FTTH_NET_OVERRIDE=network_hh3.json')
     ck = {c['node']: nkey([c['x'], c['y']]) for c in net['couplers']}
     adj_keys = set(zr.keys())
 
