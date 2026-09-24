@@ -166,10 +166,30 @@ def render_village(key):
     # --- v3: модель для фидерных трасс (Дейкстра в границе НП) и медиан ---
     V3 = de46.VillageV3(v)
     med_model = V3.medians_of(cuts)                      # врез -> точная медиана
+    # Эталон позиций ОРШ — КНИГА boq_decentral_data_v4 (на ней построены
+    # BoQ/KMZ/PDF/контроли). Пересчёт медианы в пересозданном окружении может
+    # выбрать другой узел плато равных стоимостей — расхождение фиксируем,
+    # но используем книгу (Task 51).
     for z in cuts:
         zd = db['zones'][1 + cuts.index(z)]
-        assert tuple(round(x, 1) for x in med_model[z]) == tuple(zd['orsh_px']), \
-            f'{key}: медиана книги != модели для {z}'
+        ox = tuple(zd['orsh_px'])
+        mm = tuple(round(x, 1) for x in med_model[z])
+        if mm != ox:
+            print(f'  ВНИМ: медиана модели {mm} != книги {ox} — беру книгу',
+                  flush=True)
+            med_model[z] = tuple(float(x) for x in ox)
+
+    def _v3_idx_of(med):
+        """Индекс узла V3 для медианы (точный ключ или ближайший узел)."""
+        key = tuple(round(x, 1) for x in med)
+        if key in V3.idx:
+            return V3.idx[key]
+        best_i, best_d = None, None
+        for p, i in V3.idx.items():
+            d = (p[0] - med[0]) ** 2 + (p[1] - med[1]) ** 2
+            if best_d is None or d < best_d:
+                best_i, best_d = i, d
+        return best_i
 
     # --- база и преобразование ---
     if key in CROPS:
@@ -250,30 +270,41 @@ def render_village(key):
         if len(hp) >= 3:
             dr.polygon(hp, fill=col + (38,), outline=col + (170,), width=S(4))
 
-    # 2) дропы
-    for d in net['drops']:
-        poly = [T(p) for p in d['poly']]
-        if len(poly) >= 2:
-            dr.line(poly, fill=C_DROP, width=S(2))
+    # 2) дропы (Task 51: пучки «одна муфта -> один дом» параллельными линиями)
+    _tscale = math.hypot(Mi[0][0], Mi[0][1])
+    drops_px = [dict(pts=[T(p) for p in d['poly']], coupler=d['coupler'],
+                     color=C_DROP, width=S(2))
+                for d in net['drops'] if len(d['poly']) >= 2]
+    sym50.draw_drops_bundled(dr, drops_px, gap=max(3.5, 4.0 * k), width=S(2),
+                             home_r_px=(35.0 / mpp) * _tscale)
 
-    # 3) магистраль: ствол (зона ЦУ) серым, зоны — своим цветом
+    # 3+4) магистраль и фидеры — параллельными линиями на общих трассах
+    # (Task 51): сплошные рёбра — цепочками по зонам, фидеры ЦУ->ОРШ —
+    # пунктиром своей полосы в общем пучке
+    cables = []
+    zone_edges = defaultdict(list)
     for (p, ch, L) in t.edges:
-        z = zr[ch]
+        zone_edges[zr[ch]].append((p, ch))
+    for z in [t.root] + list(cuts):
         col = C_TRUNK if z == t.root else zcolor[z] + (235,)
-        dr.line([T(p), T(ch)], fill=col, width=S(5))
-
-    # 4) фидеры ЦУ -> зонный ОРШ: пунктир цвета зоны ПО КРАТЧАЙШЕМУ ПУТИ (v3)
+        for chain in sym50.edge_chains(zone_edges.get(z, [])):
+            cables.append(dict(pts=[T(p) for p in chain], color=col,
+                               width=S(5), sort_key=-0.5))
     for i, c in enumerate(order):
         med = med_model[c]
-        chain_idx = [V3.idx[med]]
-        cur = V3.idx[med]
+        m_i = _v3_idx_of(med)                           # Task 51: узел книги
+        chain_idx = [m_i]
+        cur = m_i
         while cur != V3.root_i and V3.pred[cur] >= 0:
             cur = int(V3.pred[cur])
             chain_idx.append(cur)
         chain_idx.reverse()                       # ЦУ -> ОРШ
         pts = [T(V3.P[j]) for j in chain_idx]
-        draw_dashed(dr, pts, zcolor[c] + (215,), S(6),
-                    phase=i * (DASH + GAP) / 2.0, dash=DASH, gap=GAP)
+        cables.append(dict(pts=pts, color=zcolor[c] + (215,), width=S(6),
+                           dashed=True, phase=i * (DASH + GAP) / 2.0,
+                           dash=DASH, gap_d=GAP, sort_key=float(i)))
+    sym50.draw_cables_bundled(dr, cables, gap=max(4.5, round(6.0 * k)),
+                              dash=DASH, gap_d=GAP)
 
     # 5) муфты
     for c in net['couplers']:

@@ -27,6 +27,10 @@ _spec50 = importlib.util.spec_from_file_location(
 _sym50 = importlib.util.module_from_spec(_spec50)
 _spec50.loader.exec_module(_sym50)
 draw_olt_node, draw_orsh = _sym50.draw_olt_node, _sym50.draw_orsh
+# Task 51: параллельные кабели на общих трассах + пучки дропов
+draw_cables_bundled = _sym50.draw_cables_bundled
+draw_drops_bundled = _sym50.draw_drops_bundled
+edge_chains = _sym50.edge_chains
 
 from PIL import Image, ImageDraw, ImageFont
 Image.MAX_IMAGE_PIXELS = None
@@ -236,20 +240,36 @@ def render_village_map(ctx, v):
         if len(hp) >= 3:
             dr.polygon(hp, fill=col + (38,), outline=col + (170,), width=max(3, round(4 * k)))
 
-    for d in net['drops']:
-        poly = [T(p) for p in d['poly']]
-        if len(poly) >= 2:
-            dr.line(poly, fill=C_DROP, width=lw)
+    # Task 51: дропы пучками «одна муфта -> один дом» — параллельные линии
+    # с промежутком; начало точно у муфты, заход точно в точку ДХ
+    _ts = math.hypot(Minv[0][0], Minv[0][1]) if use_crop else 1.0
+    drops_px = [dict(pts=[T(p) for p in d['poly']], coupler=d['coupler'],
+                     color=C_DROP, width=lw)
+                for d in net['drops'] if len(d['poly']) >= 2]
+    draw_drops_bundled(dr, drops_px, gap=max(3.5, 4.0 * k), width=lw,
+                       home_r_px=(35.0 / mpp) * _ts)
 
+    # Task 51: магистраль + фидеры — параллельными линиями на общих трассах:
+    # сплошные рёбра группируются по зонам в цепочки (стыки без клиньев),
+    # фидеры зон — пунктиром своей полосой в общем пучке
+    cables = []
+    zone_edges = defaultdict(list)
     for (p, ch, L) in t.edges:
-        z = zr[ch]
+        zone_edges[zr[ch]].append((p, ch))
+    for z in [t.root] + list(cuts):
         col = C_TRUNK if z == t.root else zcolor[z] + (235,)
-        dr.line([T(p), T(ch)], fill=col, width=trunk_w)
-
+        for chain in edge_chains(zone_edges.get(z, [])):
+            cables.append(dict(pts=[T(p) for p in chain], color=col,
+                               width=trunk_w, sort_key=-0.5))
     for i, c in enumerate(order):
-        pts = [T(p) for p in t.feeder_path_nodes(c)]
-        draw_dashed(dr, pts, zcolor[c] + (215,), max(5, round(6 * k)),
-                    phase=i * (DASH + GAP) / 2.0)
+        cables.append(dict(pts=[T(p) for p in t.feeder_path_nodes(c)],
+                           color=zcolor[c] + (215,), width=max(5, round(6 * k)),
+                           dashed=True, phase=i * (DASH + GAP) / 2.0,
+                           sort_key=float(i)))
+    _dump = os.path.join(ctx.vdir(key), 'render_bundles_debug.json') \
+        if os.environ.get('FTTH_BUNDLE_DUMP') else None
+    draw_cables_bundled(dr, cables, gap=max(4.5, round(6.0 * k)),
+                        dash=DASH, gap_d=GAP, dump_path=_dump)
 
     for c in net['couplers']:
         x, y = T((c['x'], c['y']))

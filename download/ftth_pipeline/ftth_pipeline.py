@@ -74,6 +74,14 @@ DEFAULTS = dict(
     hh_cv_ctx_m=90.0,           # контекст CV-кандидата (другой объект в радиусе)
     hh_cv_min_sep_m=15.0,       # CV-кандидат не ближе к OSM-зданию
     hh_cv_deficit_pct=15.0,     # дефицит OSM-зданий (>%), при котором включается CV
+    hh_cv_vlm_gate=True,        # Task 51: VLM-гейт «крыша или дерево» CV-кандидатов
+    hh_fences_enable=True,      # Task 51: строящиеся ДХ по ограждениям пустых участков
+    hh_fence_max_area_m2=1500.0,  # <= 15 соток (по ТЗ заказчика)
+    hh_fence_min_area_m2=150.0,   # >= 1.5 сотки (антишум)
+    hh_fence_near_road_m=75.0,    # участок ближе к дороге
+    hh_fence_min_dh_m=15.0,       # дедуп с существующими ДХ
+    hh_fence_vlm=True,           # VLM-гейт «пустой огороженный участок»
+    hh_fence_vlm_top=60,         # VLM проверяет топ-N по уверенности
     # --- сеть ---
     net_densify_m=4.0,          # шаг денсификации дорожного графа
     net_snap_max_m=90.0,        # максимум привязки ДХ к дороге
@@ -587,8 +595,13 @@ def stage_fetch(ctx):
 # ============================================================================
 # СТАДИЯ 2: households — домохозяйства
 # ============================================================================
-def detect_roofs(mos_rgb, mpp):
-    """CV-детекция крыш (HSV + морфология). Кандидаты (x, y, w, h)."""
+def detect_roofs(mos_rgb, mpp, gray_v_min=110.0):
+    """CV-детекция крыш (HSV + морфология). Кандидаты (x, y, w, h).
+    Task 51: серая маска расширена до v>gray_v_min=110 (тёмный шифер;
+    в Топольном это +~1/3 серых крыш), добавлена эвристика отсева
+    круглых пятнистых крон (зелёный блоб: круглый bbox + пятнистая
+    яркость) — без VLM; окончательный гейт «крыша/дерево» — VLM (ниже
+    в households)."""
     import cv2
     hsv = cv2.cvtColor(mos_rgb, cv2.COLOR_RGB2HSV)
     h, s, v = hsv[..., 0].astype(np.int16), hsv[..., 1].astype(np.int16), hsv[..., 2].astype(np.int16)
@@ -596,7 +609,7 @@ def detect_roofs(mos_rgb, mpp):
     red = ((h <= 12) | (h >= 168)) & (s > 75) & (v > 55)
     orange = (h >= 13) & (h <= 35) & (s > 85) & (v > 95)
     green = (h >= 40) & (h <= 85) & (s > 65) & (v > 50)
-    gray = (s < 50) & (v > 140) & (v < 248)
+    gray = (s < 50) & (v > gray_v_min) & (v < 248)
     mask = blue | red | orange | green | gray
     m = (mask * 255).astype(np.uint8)
     m = cv2.morphologyEx(m, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8))
@@ -612,7 +625,247 @@ def detect_roofs(mos_rgb, mpp):
             continue
         if a / (w_ * h_) < 0.5 or max(w_, h_) / max(1, min(w_, h_)) > 4.0:
             continue
+        # Task 51: эвристика «крона дерева» (fallback без VLM): зелёный,
+        # почти круглый bbox, пятнистая яркость — почти наверняка не дом
+        hc = h[y:y + h_, x:x + w_]
+        sc = s[y:y + h_, x:x + w_]
+        vc = v[y:y + h_, x:x + w_]
+        green_frac = float(((hc >= 40) & (hc <= 85) & (sc > 65) & (vc > 50)).mean())
+        vstd = float(vc.std())
+        aspect = max(w_, h_) / max(1, min(w_, h_))
+        if (green_frac > 0.45 and a / (w_ * h_) > 0.72 and
+                0.82 < aspect < 1.22 and vstd > 30):
+            continue
         res.append((x + w_ / 2, y + h_ / 2, w_, h_))
+    return res
+
+
+def _hh2_crop_candidate(mos, x, y, w_, h_, mpp, pad_m=25.0):
+    """Кроп кандидата с красным контуром для VLM-гейта (Task 51)."""
+    import cv2
+    pad = pad_m / mpp
+    x0 = int(max(0, x - w_ / 2 - pad))
+    y0 = int(max(0, y - h_ / 2 - pad))
+    x1 = int(min(mos.shape[1], x + w_ / 2 + pad))
+    y1 = int(min(mos.shape[0], y + h_ / 2 + pad))
+    c = mos[y0:y1, x0:x1].copy()
+    pts = np.array([[(x - w_ / 2 - x0, y - h_ / 2 - y0),
+                     (x + w_ / 2 - x0, y - h_ / 2 - y0),
+                     (x + w_ / 2 - x0, y + h_ / 2 - y0),
+                     (x - w_ / 2 - x0, y + h_ / 2 - y0)]], dtype=np.int32)
+    cv2.polylines(c, [pts], True, (255, 60, 60), 3)
+    return c
+
+
+def detect_fenced_plots(mos, mpp, exist_blds, road_pts, P, near_road_fn=None):
+    """Детекция ограждений строящихся участков (Task 51, по ТЗ заказчика).
+
+    Признаки: ограждение с чёткими границами; замкнутый или разомкнутый
+    контур, образующий ПРЯМОУГОЛЬНИК; площадь <= 15 соток (1500 м²);
+    контур может прерываться зданиями/деревьями (склейка коллинеарных
+    отрезков с зазорами). Участок без дома (иначе уже обитаем) и рядом
+    с дорогой; не вдоль дороги (ложняк «дорога-прямоугольник»).
+
+    Работает на даунскейле x4 (участки 1.5-15 соток => >= 17 px при
+    1.5 м/px — достаточно; Hough на полном кадре слишком медленный).
+    Возвращает список dict(cx, cy, w, h, area_m2, conf, sides) в КООРДИНАТАХ
+    исходного кадра.
+    """
+    import cv2
+    max_area = float(P('hh_fence_max_area_m2', 1500.0))
+    min_area = float(P('hh_fence_min_area_m2', 150.0))
+    near_road_m = float(P('hh_fence_near_road_m', 75.0))
+    H, W = mos.shape[:2]
+    f = 4 if max(W, H) > 3000 else 1
+    if f > 1:
+        mos_s = cv2.resize(mos, (W // f, H // f), interpolation=cv2.INTER_AREA)
+        mpp_s = mpp * f
+    else:
+        mos_s, mpp_s = mos, mpp
+    Hs, Ws = mos_s.shape[:2]
+    bl_s = [dict(cx=b['cx'] / f, cy=b['cy'] / f) for b in exist_blds]
+    rp_s = (road_pts / f) if (road_pts is not None and len(road_pts)) else None
+    if rp_s is not None and not isinstance(rp_s, np.ndarray):
+        rp_s = np.asarray(rp_s)
+
+    gray = cv2.cvtColor(mos_s, cv2.COLOR_RGB2GRAY)
+    edges = cv2.Canny(gray, 60, 160, apertureSize=3)
+    min_len = max(7, int(10.0 / mpp_s))
+    lines = cv2.HoughLinesP(edges, 1, np.pi / 360.0, threshold=40,
+                            minLineLength=min_len,
+                            maxLineGap=max(2, int(2.5 / mpp_s)))
+    if lines is None:
+        return []
+    lines = lines[:, 0]
+    if len(lines) > 40000:                       # анти-взрыв
+        rng = np.random.default_rng(51)
+        lines = lines[np.sort(rng.choice(len(lines), 40000, replace=False))]
+    # --- 1) отрезки -> кластеры коллинеарных «сторон» ---
+    tol_ang = math.radians(6.0)
+    tol_rho = max(2.0, 1.0 / mpp_s)
+    max_gap = 15.0 / mpp_s
+    raw = []
+    for x1, y1, x2, y2 in lines:
+        th = math.atan2(y2 - y1, x2 - x1) % math.pi
+        nx, ny = -math.sin(th), math.cos(th)
+        rho = x1 * nx + y1 * ny
+        t0 = x1 * math.cos(th) + y1 * math.sin(th)
+        t1 = x2 * math.cos(th) + y2 * math.sin(th)
+        if t0 > t1:
+            t0, t1 = t1, t0
+        raw.append((rho, th, t0, t1))
+    raw.sort(key=lambda r: (round(r[0] / tol_rho), r[2]))
+    sides = []
+    cur = None                                   # (rho, th, t0, t1, n)
+    for rho, th, t0, t1 in raw:
+        if cur is not None:
+            dth = min(abs(th - cur[1]), math.pi - abs(th - cur[1]))
+            if (abs(rho - cur[0]) <= tol_rho and dth <= tol_ang and
+                    max(0.0, max(t0, cur[2]) - min(t1, cur[3])) <= max_gap):
+                cur = (cur[0] + (rho - cur[0]) / (cur[4] + 1),     # скользящее среднее
+                       cur[1], min(cur[2], t0), max(cur[3], t1),
+                       cur[4] + 1)
+                continue
+            L = (cur[3] - cur[2]) * mpp_s
+            if 10.0 <= L <= 160.0:
+                sides.append(dict(theta=cur[1], rho=cur[0], t0=cur[2],
+                                  t1=cur[3], n=cur[4],
+                                  tb=round(cur[1] / tol_ang)))
+        cur = (rho, th, t0, t1, 1)
+    if cur is not None:
+        L = (cur[3] - cur[2]) * mpp_s
+        if 10.0 <= L <= 160.0:
+            sides.append(dict(theta=cur[1], rho=cur[0], t0=cur[2],
+                              t1=cur[3], n=cur[4], tb=round(cur[1] / tol_ang)))
+    # --- 2) пары параллельных сторон -> прямоугольники (внутри бина) ---
+    min_w_m, max_w_m = 8.0, 70.0
+    by_tb = {}
+    for s_ in sides:
+        by_tb.setdefault(s_['tb'], []).append(s_)
+    cands = []
+    for tb, lst in by_tb.items():
+        if len(lst) < 2:
+            continue
+        for i in range(len(lst)):
+            for j in range(i + 1, len(lst)):
+                a, b = lst[i], lst[j]
+                w_px = abs(a['rho'] - b['rho'])
+                w_m = w_px * mpp_s
+                if not (min_w_m <= w_m <= max_w_m):
+                    continue
+                ov0 = max(a['t0'], b['t0'])
+                ov1 = min(a['t1'], b['t1'])
+                if ov1 - ov0 < 0.6 * min(a['t1'] - a['t0'], b['t1'] - b['t0']):
+                    continue
+                L_m = (ov1 - ov0) * mpp_s
+                area = L_m * w_m
+                if not (min_area <= area <= max_area):
+                    continue
+                ct = (ov0 + ov1) / 2.0
+                cr = (a['rho'] + b['rho']) / 2.0
+                cx = ct * math.cos(a['theta']) + cr * (-math.sin(a['theta']))
+                cy = ct * math.sin(a['theta']) + cr * math.cos(a['theta'])
+                if not (0 <= cx < Ws and 0 <= cy < Hs):
+                    continue
+                # замыкающие стороны: перпендикулярные (tb +- 15 бинов)
+                closes = 0
+                lo, hi = min(a['rho'], b['rho']), max(a['rho'], b['rho'])
+                for tb2 in ((tb + 15) % 180, (tb - 15) % 180,
+                            (tb + 14) % 180, (tb - 14) % 180):
+                    for c in by_tb.get(tb2, ()):
+                        rc = c['rho']
+                        if not (lo - 2 * tol_rho <= rc <= hi + 2 * tol_rho):
+                            continue
+                        if (c['t1'] - c['t0']) < 0.5 * w_px:
+                            continue
+                        closes += 1
+                # Task 51 (ужесточение по итогам аудита VLM): обе длинные
+                # стороны — сплошные ограждения (>= 2 склеенных сегмента),
+                # контур замкнут >= 2 замыканиями (3-4 стороны) — поля,
+                # лесополосы и застройка отсеиваются
+                if closes < 2 or min(a['n'], b['n']) < 2:
+                    continue
+                conf = min(1.0, 0.3 * (a['n'] + b['n']) + 0.2 * closes)
+                cands.append(dict(cx=cx, cy=cy, w=w_m, h=L_m, area_m2=area,
+                                  conf=conf, sides=2 + min(closes, 2),
+                                  theta=a['theta'], t0=ov0, t1=ov1,
+                                  r1=lo, r2=hi))
+    if not cands:
+        return []
+    # --- 3) NMS ---
+    cands.sort(key=lambda c: -c['conf'])
+
+    def rect_of(c):
+        ct_, st_ = math.cos(c['theta']), math.sin(c['theta'])
+        nsx, nsy = -st_, ct_
+        return [(t_ * ct_ + r_ * nsx, t_ * st_ + r_ * nsy)
+                for t_, r_ in ((c['t0'], c['r1']), (c['t1'], c['r1']),
+                               (c['t1'], c['r2']), (c['t0'], c['r2']))]
+
+    def iom(pa, pb):
+        ax0, ay0 = min(x for x, _ in pa), min(y for _, y in pa)
+        ax1, ay1 = max(x for x, _ in pa), max(y for _, y in pa)
+        bx0, by0 = min(x for x, _ in pb), min(y for _, y in pb)
+        bx1, by1 = max(x for x, _ in pb), max(y for _, y in pb)
+        ix = max(0, min(ax1, bx1) - max(ax0, bx0))
+        iy = max(0, min(ay1, by1) - max(ay0, by0))
+        inter = ix * iy
+        union = max(1e-9, (ax1 - ax0) * (ay1 - ay0) +
+                    (bx1 - bx0) * (by1 - by0) - inter)
+        return inter / union
+
+    kept = []
+    for c in cands:
+        pc = rect_of(c)
+        if any(iom(pc, rect_of(k)) > 0.45 for k in kept):
+            continue
+        kept.append(c)
+    # --- 4) фильтры (пустота/дорога/близость к дороге), координаты -> исходный кадр
+    res = []
+    for c in kept:
+        pc = rect_of(c)
+        x0 = min(x for x, _ in pc) * f
+        y0 = min(y for _, y in pc) * f
+        x1 = max(x for x, _ in pc) * f
+        y1 = max(y for _, y in pc) * f
+        bx0, by0 = int(max(0, x0)), int(max(0, y0))
+        bx1, by1 = int(min(W, x1)), int(min(H, y1))
+        if bx1 - bx0 < 4 or by1 - by0 < 4:
+            continue
+        cx_f, cy_f = c['cx'] * f, c['cy'] * f
+        occupied = False
+        buf = 6.0 / mpp
+        for b in exist_blds:
+            if (b['cx'] > x0 - buf and b['cx'] < x1 + buf and
+                    b['cy'] > y0 - buf and b['cy'] < y1 + buf):
+                occupied = True
+                break
+        if occupied:
+            continue
+        # анти-лес: тени крон дают долю тёмных px (v<70) 0.5-0.75, у дворов
+        # и пустых участков — 0.01-0.17 (замер Топольного, Task 51)
+        hsv_in = cv2.cvtColor(mos[by0:by1, bx0:bx1], cv2.COLOR_RGB2HSV)
+        hh_, ss_, vv_ = (hsv_in[..., 0].astype(np.int16),
+                         hsv_in[..., 1].astype(np.int16),
+                         hsv_in[..., 2].astype(np.int16))
+        dfrac = float((vv_ < 70).mean())
+        if dfrac > 0.35:
+            continue
+        gfrac = float((((hh_ >= 40) & (hh_ <= 85)) & (ss_ > 65) &
+                       (vv_ > 50)).mean())
+        if gfrac > 0.55:
+            continue
+        if road_pts is not None and len(road_pts):
+            m_in = ((road_pts[:, 0] >= bx0) & (road_pts[:, 0] <= bx1) &
+                    (road_pts[:, 1] >= by0) & (road_pts[:, 1] <= by1))
+            if int(m_in.sum()) > 0.08 * (bx1 - bx0) * (by1 - by0):
+                continue
+        if near_road_fn is not None and not near_road_fn(cx_f, cy_f, near_road_m):
+            continue
+        res.append(dict(cx=cx_f, cy=cy_f, w=c['w'], h=c['h'],
+                        area_m2=c['area_m2'], conf=round(c['conf'], 2),
+                        sides=c['sides'],
+                        poly=[(x * f, y * f) for x, y in pc]))
     return res
 
 
@@ -829,6 +1082,156 @@ def _hh2_vlm_available():
 _HH2_VLM_CACHE = None
 _HH2_VLM_VERDICTS = None    # кэш вердиктов {md5(jpeg-кропа): n} — переживает прогоны
 _HH2_VLM_CACHE_FILE = None  # <vdir>/vlm_verdicts.json; ставится в refine_households
+_HH2_VLM_ROOFS = None       # Task 51: кэш гейта «крыша или дерево» {md5: bool}
+_HH2_VLM_ROOFS_FILE = None  # <vdir>/vlm_roof_gates.json
+
+
+def _hh2_vlm_roofs_load(vdir):
+    """Загрузка кэша гейта крыш (Task 51)."""
+    global _HH2_VLM_ROOFS, _HH2_VLM_ROOFS_FILE
+    _HH2_VLM_ROOFS_FILE = os.path.join(vdir, 'vlm_roof_gates.json')
+    if _HH2_VLM_ROOFS is None:
+        try:
+            with open(_HH2_VLM_ROOFS_FILE, encoding='utf-8') as f:
+                _HH2_VLM_ROOFS = json.load(f)
+            print(f'  VLM-гейт крыш: кэш {len(_HH2_VLM_ROOFS)} шт.')
+        except Exception:
+            _HH2_VLM_ROOFS = {}
+    return _HH2_VLM_ROOFS
+
+
+def _hh2_vlm_roofs_save():
+    if not _HH2_VLM_ROOFS_FILE or _HH2_VLM_ROOFS is None:
+        return
+    try:
+        tmp = _HH2_VLM_ROOFS_FILE + '.tmp'
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(_HH2_VLM_ROOFS, f)
+        os.replace(tmp, _HH2_VLM_ROOFS_FILE)
+    except Exception:
+        pass
+
+
+def _hh2_vlm_isroof(crop_rgb, note=''):
+    """Вопрос VLM: прямоугольная крыша дома в контуре? (Task 51)
+    True — крыша; False — дерево/куст/иное; None — сервис недоступен
+    (гейт пропускает кандидата без вердикта, не отбрасывая)."""
+    try:
+        import cv2
+        import re
+        import subprocess, tempfile, os as _os
+        ok, buf = cv2.imencode('.jpg', crop_rgb, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        if not ok:
+            return None
+        key = 'roof:' + hashlib.md5(buf.tobytes()).hexdigest()
+        if _HH2_VLM_ROOFS is not None and key in _HH2_VLM_ROOFS:
+            return _HH2_VLM_ROOFS[key]
+        with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+            f.write(buf.tobytes())
+            path = f.name
+        try:
+            time.sleep(0.6)
+            prompt = ('Спутниковый снимок села (~0.4 м/px). Красный контур — '
+                      'кандидат детектора на ЗДАНИЕ. Признак крыши дома: '
+                      'ПРЯМОУГОЛЬНАЯ/четырёхугольная кровля с ровной '
+                      'поверхностью (шифер, металл, рубероид — любой цвет), '
+                      'ровные края. НЕ дом: дерево/куст (круглая пятнистая '
+                      'крона), стог, контейнер, бетонный блок, вода, дорога. '
+                      'Ответь ТОЛЬКО JSON: {"is_roof": <bool>, '
+                      '"object": "house"|"tree"|"shrub"|"other"}')
+            r = subprocess.run(['z-ai', 'vision', '-p', prompt, '-i', path],
+                               capture_output=True, text=True, timeout=120)
+            import json as _json
+            txt = (r.stdout or '').strip()
+            content = None
+            if r.returncode == 0 and txt:
+                try:
+                    i, j = txt.index('{'), txt.rindex('}')
+                    outer = _json.loads(txt[i:j + 1])
+                    content = outer['choices'][0]['message']['content']
+                except Exception:
+                    content = txt
+            js = None
+            if content:
+                for m in re.finditer(r'\{[^{}]*\}', content, re.S):
+                    try:
+                        cand = _json.loads(m.group(0))
+                    except Exception:
+                        continue
+                    if isinstance(cand, dict) and 'is_roof' in cand:
+                        js = cand
+                        break
+            if not (js and 'is_roof' in js):
+                return None
+            verdict = bool(js['is_roof'])
+            if _HH2_VLM_ROOFS is not None:
+                _HH2_VLM_ROOFS[key] = verdict
+                _hh2_vlm_roofs_save()
+            return verdict
+        finally:
+            _os.unlink(path)
+    except Exception:
+        return None
+
+
+def _hh2_vlm_isfence(crop_rgb, note=''):
+    """Вопрос VLM: огороженный ПУСТОЙ участок (стройка)? (Task 51)
+    True — да; False — внутри дом/застройка/поле/лес; None — недоступен."""
+    try:
+        import cv2
+        import re
+        import subprocess, tempfile, os as _os
+        ok, buf = cv2.imencode('.jpg', crop_rgb, [cv2.IMWRITE_JPEG_QUALITY, 88])
+        if not ok:
+            return None
+        key = 'fence:' + hashlib.md5(buf.tobytes()).hexdigest()
+        if _HH2_VLM_ROOFS is not None and key in _HH2_VLM_ROOFS:
+            return _HH2_VLM_ROOFS[key]
+        with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+            f.write(buf.tobytes())
+            path = f.name
+        try:
+            time.sleep(0.6)
+            prompt = ('Спутниковый снимок села (~0.4 м/px). Розовая рамка — '
+                      'границы участка по детекции ограждения. Ответь ТОЛЬКО '
+                      'JSON: {"fenced_empty_plot": <bool>} — true, если '
+                      'участок ОГОРОЖЕН (забор по периметру, допускаются '
+                      'разрывы) и ВНУТРИ НЕТ жилого дома (пусто, стройка, '
+                      'недострой, фундамент). false — если внутри дом/ангар, '
+                      'это поле/лес без ограждения, дорога и т.п.')
+            r = subprocess.run(['z-ai', 'vision', '-p', prompt, '-i', path],
+                               capture_output=True, text=True, timeout=120)
+            import json as _json
+            txt = (r.stdout or '').strip()
+            content = None
+            if r.returncode == 0 and txt:
+                try:
+                    i, j = txt.index('{'), txt.rindex('}')
+                    outer = _json.loads(txt[i:j + 1])
+                    content = outer['choices'][0]['message']['content']
+                except Exception:
+                    content = txt
+            js = None
+            if content:
+                for m in re.finditer(r'\{[^{}]*\}', content, re.S):
+                    try:
+                        cand = _json.loads(m.group(0))
+                    except Exception:
+                        continue
+                    if isinstance(cand, dict) and 'fenced_empty_plot' in cand:
+                        js = cand
+                        break
+            if js is None:
+                return None
+            verdict = bool(js['fenced_empty_plot'])
+            if _HH2_VLM_ROOFS is not None:
+                _HH2_VLM_ROOFS[key] = verdict
+                _hh2_vlm_roofs_save()
+            return verdict
+        finally:
+            _os.unlink(path)
+    except Exception:
+        return None
 
 
 def _hh2_vlm_save_cache():
@@ -1130,6 +1533,27 @@ def stage_households(ctx):
                         poly=[(a[0] - a[2] / 2, a[1] - a[3] / 2), (a[0] + a[2] / 2, a[1] - a[3] / 2),
                               (a[0] + a[2] / 2, a[1] + a[3] / 2), (a[0] - a[2] / 2, a[1] + a[3] / 2)])
                   for a in accepted]
+            # Task 51: VLM-гейт «крыша или дерево/иное» для CV-кандидатов
+            if ctx.P('hh_cv_vlm_gate', True) and _hh2_vlm_available():
+                _hh2_vlm_roofs_load(ctx.vdir(v['key']))
+                gated, n_tree, n_unk = [], 0, 0
+                for (x, y, w_, h_) in accepted:
+                    crop = _hh2_crop_candidate(mos, x, y, w_, h_, mpp)
+                    verdict = _hh2_vlm_isroof(crop)
+                    if verdict is None:
+                        n_unk += 1
+                        gated.append((x, y, w_, h_))
+                    elif verdict:
+                        gated.append((x, y, w_, h_))
+                    else:
+                        n_tree += 1
+                print(f"  VLM-гейт крыш: принято {len(gated)}, "
+                      f"отброшено (не крыша) {n_tree}, без вердикта {n_unk}")
+                accepted = gated
+                cv_blds = [dict(cx=a[0], cy=a[1], w=a[2], h=a[3], src='cv', tags={},
+                          poly=[(a[0] - a[2] / 2, a[1] - a[3] / 2), (a[0] + a[2] / 2, a[1] - a[3] / 2),
+                                (a[0] + a[2] / 2, a[1] + a[3] / 2), (a[0] - a[2] / 2, a[1] + a[3] / 2)])
+                      for a in accepted]
         else:
             print(f"  CV-супплект: off (дефицит OSM {deficit:.0f}%)")
 
@@ -1171,6 +1595,54 @@ def stage_households(ctx):
                                    lat=round(la, 6), lon=round(lo, 6), n_bld=len(bl),
                                    main_w=main['w'], main_h=main['h'], main_src=main['src']))
             yard_map[households[-1]['id']] = (bl, main)
+        # Task 51: строящиеся ДХ — ограждения пустых участков (<= 15 соток,
+        # контур замкнут/разомкнут, но образует прямоугольник, допускаются
+        # разрывы зданиями/деревьями)
+        if ctx.P('hh_fences_enable', True):
+            fenc = detect_fenced_plots(mos, mpp, all_blds, road_arr, ctx.P,
+                                       near_road_fn=near_road)
+            # VLM-гейт «огороженный пустой участок» (топ-N по уверенности)
+            if ctx.P('hh_fence_vlm', True) and fenc and _hh2_vlm_available():
+                _hh2_vlm_roofs_load(ctx.vdir(v['key']))
+                fenc.sort(key=lambda f: -f['conf'])
+                top = ctx.P('hh_fence_vlm_top', 60)
+                gated = []
+                n_no, n_unk = 0, 0
+                import cv2 as _cv2
+                for f in fenc[:top]:
+                    x0 = int(max(0, min(p[0] for p in f['poly']) - 15.0 / mpp))
+                    y0 = int(max(0, min(p[1] for p in f['poly']) - 15.0 / mpp))
+                    x1 = int(min(mos.shape[1], max(p[0] for p in f['poly']) + 15.0 / mpp))
+                    y1 = int(min(mos.shape[0], max(p[1] for p in f['poly']) + 15.0 / mpp))
+                    crop = mos[y0:y1, x0:x1].copy()
+                    pts = np.array([[(px_ - x0, py_ - y0) for px_, py_ in f['poly']]],
+                                   dtype=np.int32)
+                    _cv2.polylines(crop, [pts], True, (255, 80, 255), 4)
+                    verdict = _hh2_vlm_isfence(crop)
+                    if verdict is None:
+                        n_unk += 1
+                        gated.append(f)
+                    elif verdict:
+                        gated.append(f)
+                    else:
+                        n_no += 1
+                fenc = gated + fenc[top:]
+                print(f"  VLM-гейт ограждений: принято {len(gated)}, "
+                      f"отклонено {n_no}, без вердикта {n_unk}")
+            n_f = 0
+            for f in fenc:
+                if any(math.hypot(f['cx'] - h2['cx'], f['cy'] - h2['cy']) * mpp
+                       < ctx.P('hh_fence_min_dh_m', 15.0) for h2 in households):
+                    continue
+                la, lo = px_to_geo(f['cx'], f['cy'], v['lat'], west, north, mpp)
+                households.append(dict(id=len(households) + 1, cx=f['cx'], cy=f['cy'],
+                                       lat=round(la, 6), lon=round(lo, 6), n_bld=0,
+                                       main_w=f['w'] / mpp, main_h=f['h'] / mpp,
+                                       main_src='fence_new',
+                                       area_m2=round(f['area_m2'], 1)))
+                n_f += 1
+            print(f"  ограждения: кандидатов {len(fenc)}, строящихся ДХ +{n_f}")
+
         dev = 100 * (len(households) - v.get('hh', len(households))) / max(1, v.get('hh', 1))
         print(f"  OSM {len(osm_blds)} + CV {len(cv_blds)} -> {len(households)} ДХ"
               f" (заказ {v.get('hh', '?')}, {dev:+.1f}%)")
