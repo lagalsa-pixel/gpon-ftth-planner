@@ -47,8 +47,9 @@ git clone https://github.com/lagalsa-pixel/gpon-ftth-planner.git
 - `backup L5: ops` — журнал работ и служебные скрипты бэкапа (49_github_push.sh, 49_tmp_safety_copy.sh)
 
 Скрипты публикации: `scripts/49_github_push.sh <TOKEN>` (послойный пуш + создание Release),
-`scripts/56_release_v6.sh <TOKEN>` (обновление релиза: замена актива + описание).
+`scripts/56_release_v6.sh`, `scripts/57_release_v7.sh` (обновление релиза: замена актива + описание).
 - `backup L6: push completed` — фиксация успешной отправки на GitHub (23.09.2026)
 - `Task 53-55: remarks push` — правки по замечаниям заказчика по Алтайскому, релиз v6 (25.09.2026)
+- `Task 57: remarks final` — южный карман +4 дома, 295 многоэтажка 1→8; релиз v7 (25.09.2026)
 
-**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner (main, 10 747 файлов, head acf0e47) + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v6.zip` (124,6 МБ).
+**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner (main, head 3de0c7a) + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v7.zip` (124,6 МБ).
