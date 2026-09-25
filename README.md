@@ -24,7 +24,7 @@
 
 ## Исключения из git (важно!)
 
-1. **`download/Карты_зон_ОРШ_схема_D_ВКО.zip` (117 МБ)** — превышает лимит git-блоба
+1. **`download/Карты_зон_ОРШ_схема_D_ВКО.zip` (124,6 МБ)** — превышает лимит git-блоба
    GitHub (100 МБ). Загружен как **актив GitHub Release** (лимит 2 ГБ). Содержимое
    идентично каталогу `download/snp_vko/`, т.е. при необходимости zip восстанавливается:
    `cd download && zip -r Карты_зон_ОРШ_схема_D_ВКО.zip snp_vko/`
@@ -46,7 +46,9 @@ git clone https://github.com/lagalsa-pixel/gpon-ftth-planner.git
 - `backup L4: release maps` — карты зон ОРШ по НП (download/snp_vko/, ftth_pipeline/)
 - `backup L5: ops` — журнал работ и служебные скрипты бэкапа (49_github_push.sh, 49_tmp_safety_copy.sh)
 
-Скрипт отправки: `scripts/49_github_push.sh <TOKEN>` (послойный пуш + Release с zip-активом).
+Скрипты публикации: `scripts/49_github_push.sh <TOKEN>` (послойный пуш + создание Release),
+`scripts/56_release_v6.sh <TOKEN>` (обновление релиза: замена актива + описание).
 - `backup L6: push completed` — фиксация успешной отправки на GitHub (23.09.2026)
+- `Task 53-55: remarks push` — правки по замечаниям заказчика по Алтайскому, релиз v6 (25.09.2026)
 
-**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner (main, 9373 файла) + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO.zip` (117,1 МБ).
+**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner (main, 10 747 файлов, head acf0e47) + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v6.zip` (124,6 МБ).
