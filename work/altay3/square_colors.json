@@ -1,0 +1,362 @@
+[
+ {
+  "key": "solnechnoe",
+  "bid": 602018624,
+  "hh_id": 9,
+  "L": 100.3,
+  "W": 35.5,
+  "ar": 2.82,
+  "n_dh": 1,
+  "drop_len": 16.9,
+  "rgb": [
+   2,
+   253,
+   223
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 2154,
+  "my": 4378,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 435768770,
+  "hh_id": 14,
+  "L": 129.0,
+  "W": 15.7,
+  "ar": 8.24,
+  "n_dh": 2,
+  "drop_len": 49.9,
+  "rgb": [
+   188,
+   71,
+   77
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 674,
+  "my": 2711,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 435768770,
+  "hh_id": 370,
+  "L": 129.0,
+  "W": 15.7,
+  "ar": 8.24,
+  "n_dh": 2,
+  "drop_len": 84.0,
+  "rgb": [
+   216,
+   98,
+   96
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 679,
+  "my": 3049,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327418,
+  "hh_id": 92,
+  "L": 27.0,
+  "W": 10.3,
+  "ar": 2.62,
+  "n_dh": 1,
+  "drop_len": 55.0,
+  "rgb": [
+   122,
+   80,
+   67
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 1931,
+  "my": 4800,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327498,
+  "hh_id": 258,
+  "L": 51.7,
+  "W": 14.4,
+  "ar": 3.58,
+  "n_dh": 2,
+  "drop_len": 25.1,
+  "rgb": [
+   51,
+   109,
+   163
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 2116,
+  "my": 3938,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327635,
+  "hh_id": 376,
+  "L": 38.0,
+  "W": 12.3,
+  "ar": 3.09,
+  "n_dh": 2,
+  "drop_len": 78.3,
+  "rgb": [
+   166,
+   69,
+   60
+  ],
+  "pal_i": 8,
+  "pal_d": 733,
+  "mx": 1146,
+  "my": 3404,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327687,
+  "hh_id": 90,
+  "L": 25.7,
+  "W": 10.9,
+  "ar": 2.36,
+  "n_dh": 2,
+  "drop_len": 36.6,
+  "rgb": [
+   64,
+   95,
+   119
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 3495,
+  "my": 3774,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327687,
+  "hh_id": 384,
+  "L": 25.7,
+  "W": 10.9,
+  "ar": 2.36,
+  "n_dh": 2,
+  "drop_len": 46.6,
+  "rgb": [
+   31,
+   105,
+   172
+  ],
+  "pal_i": 0,
+  "pal_d": 584,
+  "mx": 3497,
+  "my": 3842,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327693,
+  "hh_id": 115,
+  "L": 26.8,
+  "W": 9.0,
+  "ar": 2.99,
+  "n_dh": 2,
+  "drop_len": 56.4,
+  "rgb": [
+   58,
+   91,
+   111
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 3499,
+  "my": 4362,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327693,
+  "hh_id": 392,
+  "L": 26.8,
+  "W": 9.0,
+  "ar": 2.99,
+  "n_dh": 2,
+  "drop_len": 51.9,
+  "rgb": [
+   55,
+   86,
+   102
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 3523,
+  "my": 4360,
+  "half": false
+ },
+ {
+  "key": "prigorodnoe",
+  "bid": 688327837,
+  "hh_id": 118,
+  "L": 29.6,
+  "W": 8.0,
+  "ar": 3.7,
+  "n_dh": 1,
+  "drop_len": 41.7,
+  "rgb": [
+   61,
+   92,
+   112
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 3072,
+  "my": 1983,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 496463484,
+  "hh_id": 298,
+  "L": 48.4,
+  "W": 17.9,
+  "ar": 2.7,
+  "n_dh": 2,
+  "drop_len": 11.3,
+  "rgb": [
+   12,
+   232,
+   205
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 1268,
+  "my": 2383,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 496463486,
+  "hh_id": 49,
+  "L": 28.2,
+  "W": 10.6,
+  "ar": 2.66,
+  "n_dh": 1,
+  "drop_len": 28.9,
+  "rgb": [
+   28,
+   107,
+   121
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 1453,
+  "my": 3632,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 496463487,
+  "hh_id": 40,
+  "L": 29.5,
+  "W": 11.9,
+  "ar": 2.48,
+  "n_dh": 2,
+  "drop_len": 49.3,
+  "rgb": [
+   56,
+   114,
+   119
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 1460,
+  "my": 3458,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 496463488,
+  "hh_id": 44,
+  "L": 28.5,
+  "W": 12.0,
+  "ar": 2.37,
+  "n_dh": 2,
+  "drop_len": 63.8,
+  "rgb": [
+   208,
+   51,
+   48
+  ],
+  "pal_i": 9,
+  "pal_d": 261,
+  "mx": 1459,
+  "my": 3231,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 496463489,
+  "hh_id": 41,
+  "L": 27.9,
+  "W": 12.5,
+  "ar": 2.23,
+  "n_dh": 2,
+  "drop_len": 34.6,
+  "rgb": [
+   222,
+   49,
+   48
+  ],
+  "pal_i": 9,
+  "pal_d": 5,
+  "mx": 1461,
+  "my": 3006,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 637127256,
+  "hh_id": 54,
+  "L": 25.4,
+  "W": 10.7,
+  "ar": 2.37,
+  "n_dh": 1,
+  "drop_len": 34.9,
+  "rgb": [
+   1,
+   253,
+   224
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 2565,
+  "my": 3388,
+  "half": false
+ },
+ {
+  "key": "altaiskiy",
+  "bid": 637127276,
+  "hh_id": 68,
+  "L": 29.9,
+  "W": 7.9,
+  "ar": 3.77,
+  "n_dh": 1,
+  "drop_len": 20.6,
+  "rgb": [
+   137,
+   70,
+   157
+  ],
+  "pal_i": null,
+  "pal_d": 999,
+  "mx": 695,
+  "my": 5829,
+  "half": false
+ }
+]

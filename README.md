@@ -52,5 +52,6 @@ git clone https://github.com/lagalsa-pixel/gpon-ftth-planner.git
 - `Task 53-55: remarks push` — правки по замечаниям заказчика по Алтайскому, релиз v6 (25.09.2026)
 - `Task 57: remarks final` — южный карман +4 дома, 295 многоэтажка 1→8; релиз v7 (25.09.2026)
 - `Task 58: MZD icons + operator stage` — МЖД одним значком с числом квартир (31 значок, 482 ДХ, расчёт без изменений); этап ручной корректировки оператора (operator_review + corrections.json); релиз v8 (25.09.2026)
+- `Task 59: altay3 remark` — Пригородное bid 688327687 «многоквартирный дом»: 2→4 ДХ (lv=1, формула), значок МЖД «4» (значков 32); ВКО 3089 ДХ; релиз v9 (25.09.2026)
 
-**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v8.zip` (124,6 МБ). Итог ВКО: 3087 ДХ · 36 зон · 42 ОРШ · 1498,3 вол-км · 6938 сварок (QA ALL PASS).
+**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v9.zip` (123,9 МБ). Итог ВКО: 3089 ДХ · 36 зон · 42 ОРШ · 1498,3 вол-км · 6942 сварки (QA ALL PASS).
