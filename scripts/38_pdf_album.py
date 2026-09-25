@@ -189,7 +189,7 @@ def title_page(c):
     kpis = [('6', 'сельских населённых пунктов'),
             ('3 089', 'домохозяйств (ДХ)'),
             ('36 + 6', 'зонных ОРШ + ЦУ (OLT)'),
-            ('1 498,3 км', 'суммарного волокна')]
+            ('1 499,2 км', 'суммарного волокна')]
     nat = [max(pdfmetrics.stringWidth(n, 'DejaVu-Bold', 33),
                pdfmetrics.stringWidth(l, 'DejaVu', 12.5)) + 44
            for n, l in kpis]

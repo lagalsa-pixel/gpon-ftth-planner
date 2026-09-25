@@ -495,14 +495,18 @@ def render_village(key):
     m = S(20)
     hh_pts = [T(d['poly'][-1]) for d in net['drops']
               if d['hh_id'] not in mzd_hidden]
-    hh_pts += [T((g['cx'], g['cy'])) for g in MZD]   # Task 58: значки тоже закрывать легендой нельзя
     coupler_pts = [T((c['x'], c['y'])) for c in net['couplers']]
     orsh_pts = [T(med_model[c]) for c in order]
     cu_pt = T((net['anchor']['x'], net['anchor']['y']))
+    # Task 58: значки МЖД закрывать легендой нельзя; Task 60: вес 1 был
+    # слишком слаб (легенда BR накрыла значок «многоквартирный дом» —
+    # заказчик месяц не видел результат своей правки) -> вес 25 (уровня ОРШ)
+    mzd_pts = [T((g['cx'], g['cy'])) for g in MZD]
 
     def covered_score(lx, ly):
         s = 0
-        for pts, w in ((hh_pts, 1), (coupler_pts, 2), (orsh_pts, 20)):
+        for pts, w in ((hh_pts, 1), (coupler_pts, 2), (orsh_pts, 20),
+                       (mzd_pts, 25)):
             for (hx_, hy_) in pts:
                 if lx - m <= hx_ <= lx + LW + m and ly - m <= hy_ <= ly + LHH + m:
                     s += w
