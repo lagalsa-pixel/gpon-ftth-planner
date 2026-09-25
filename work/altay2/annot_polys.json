@@ -1,0 +1,8 @@
+{
+ "match": {
+  "scale": 2.0,
+  "inliers": 8
+ },
+ "annotation_px": 5,
+ "polys": []
+}

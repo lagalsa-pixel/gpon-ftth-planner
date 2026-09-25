@@ -1,0 +1,93 @@
+{
+ "img_9.png": {
+  "match": {
+   "variant": "raw",
+   "scale": 1.0,
+   "inliers": 12,
+   "good": 30,
+   "ncc": 0.942,
+   "region": [
+    1604,
+    5856,
+    2129,
+    6247
+   ]
+  },
+  "buildings": [
+   {
+    "id": 637127290,
+    "size": "13.4x32.9",
+    "area": 441.9,
+    "drops": 8,
+    "cx": 3516.179895511864,
+    "cy": 7433.101769457746,
+    "tags": {},
+    "center_in": true
+   },
+   {
+    "id": 637127291,
+    "size": "12.7x34.1",
+    "area": 431.4,
+    "drops": 8,
+    "cx": 3388.4253167345223,
+    "cy": 7432.525491880604,
+    "tags": {},
+    "center_in": true
+   },
+   {
+    "id": 637127281,
+    "size": "5.7x15.4",
+    "area": 88.6,
+    "drops": 1,
+    "cx": 3611.4244305612447,
+    "cy": 7577.118774740028,
+    "tags": {},
+    "center_in": false
+   }
+  ]
+ },
+ "img_10.png": null,
+ "img_11.png": {
+  "match": {
+   "variant": "rot180",
+   "scale": 2.0,
+   "inliers": 8,
+   "good": 12,
+   "ncc": 0.594,
+   "region": [
+    1844,
+    6588,
+    1984,
+    6938
+   ]
+  },
+  "buildings": [
+   {
+    "id": 637127283,
+    "size": "9.3x28.9",
+    "area": 270.6,
+    "drops": 1,
+    "cx": 3505.5879708908046,
+    "cy": 7781.98836371754,
+    "tags": {},
+    "center_in": true
+   }
+  ]
+ },
+ "img_12.png": {
+  "match": {
+   "variant": "rotCCW",
+   "scale": 2.0,
+   "inliers": 8,
+   "good": 13,
+   "ncc": 0.924,
+   "region": [
+    2209,
+    6650,
+    2496,
+    6861
+   ]
+  },
+  "buildings": []
+ }
+}

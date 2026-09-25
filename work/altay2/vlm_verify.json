@@ -1,0 +1,14 @@
+{
+ "r1": {
+  "all_connected": true,
+  "breaks": 0,
+  "issues": "Все здания подключены, обрывов нет, трассы корректны",
+  "quality": "ok"
+ },
+ "r2": {
+  "all_connected": false,
+  "breaks": 0,
+  "issues": "Нижние здания не подключены, отсутствуют линии и точки ДХ",
+  "quality": "problems"
+ }
+}

@@ -1,0 +1,42 @@
+{
+ "img_9.png": {
+  "variant": "raw",
+  "scale": 1.0,
+  "inliers": 12,
+  "good": 30,
+  "ncc": 0.942,
+  "region": [
+   1604,
+   5856,
+   2129,
+   6247
+  ]
+ },
+ "img_10.png": null,
+ "img_11.png": {
+  "variant": "rot180",
+  "scale": 2.0,
+  "inliers": 8,
+  "good": 12,
+  "ncc": 0.594,
+  "region": [
+   1844,
+   6588,
+   1984,
+   6938
+  ]
+ },
+ "img_12.png": {
+  "variant": "rotCCW",
+  "scale": 2.0,
+  "inliers": 8,
+  "good": 13,
+  "ncc": 0.924,
+  "region": [
+   2209,
+   6650,
+   2496,
+   6861
+  ]
+ }
+}

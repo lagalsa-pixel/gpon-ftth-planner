@@ -54,9 +54,9 @@ CBOOK = json.load(open(f'{BASE_DIR}/work/boq_cascade16_data.json', encoding='utf
 # --- контроль внутренней согласованности книги v3 ---
 mtD = DBOOK['materials_total']
 TOTD = DBOOK['totals']
-assert sum(v['dhx_served'] for v in DBOOK['villages']) == TOTD['dhx_served'] == 3072
+assert sum(v['dhx_served'] for v in DBOOK['villages']) == TOTD['dhx_served'] == 3076
 assert abs(sum(v['fiber_km'] for v in DBOOK['villages']) - TOTD['fiber_km']) < 0.1
-assert sum(z['houses'] for v in DBOOK['villages'] for z in v['zones']) == 3072
+assert sum(z['houses'] for v in DBOOK['villages'] for z in v['zones']) == 3076
 assert sum(v['n_zones'] for v in DBOOK['villages']) == TOTD['n_zones']
 sw15 = next(s for s in DEXP['sweep'] if s['s_min'] == 15)   # исторический sweep v1 (обоснование S_MIN=15)
 
@@ -347,12 +347,12 @@ cab_tot = lambda mt: round(sum(mt[f'cable_{s}'] for s in de28.STD_FIBERS), 1)
 susB = mtB['suspend_kits'] + mtB.get('drop_ext_suspends', 0)
 susC = mtC['suspend_kits'] + mtC.get('drop_ext_suspends', 0)
 avg_drop = lambda book: round(sum(v['drop_km_total'] if 'drop_km_total' in v else v['drop_km']
-                                  for v in book['villages']) / 3072 * 1000, 1)
+                                  for v in book['villages']) / 3076 * 1000, 1)
 max_drop = lambda book: max(v['max_drop_m'] for v in book['villages'])
 
 ROWS = [
     # (название, A, B, C, D, формат, лучшая?)
-    ('Обслужено ДХ, шт', 3072, 3072, 3072, 3072, F_INT, False),
+    ('Обслужено ДХ, шт', 3076, 3076, 3076, 3076, F_INT, False),
     ('Волокно-км', tA['fiber_km'] if 'fiber_km' in tA else 4375.1, tB['fiber_km'], tC['fiber_km'],
      tD['fiber_km'], F_KM, True),
     ('Волокно-км на ДХ, км', None, None, None, None, '0.00', True),
@@ -388,7 +388,7 @@ for i, (name, a, b, c, d, fmt, best) in enumerate(ROWS):
     if name == 'Волокно-км на ДХ, км':
         fk_r = G_ROW_IDX['Волокно-км']
         for col, L in zip(range(4, 8), 'DEFG'):
-            ws.cell(row=r, column=col, value=f'={L}{fk_r}/3072')
+            ws.cell(row=r, column=col, value=f'={L}{fk_r}/3076')
     elif name == 'ВСЕГО кабель + дропы, км':
         cab_r = G_ROW_IDX['Магистральный кабель, км']
         dr_r = G_ROW_IDX['Дроп-кабель, км']

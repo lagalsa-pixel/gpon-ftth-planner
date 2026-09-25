@@ -1,0 +1,32 @@
+{
+  "b283_a": {
+    "levels": 1,
+    "porches": 4,
+    "antennas": 0,
+    "state": "ok",
+    "roof": "gable",
+    "conf": 0.85
+  },
+  "b283_b": {
+    "parse_error": true
+  },
+  "b12_a": {
+    "levels": 1,
+    "porches": 2,
+    "antennas": 0,
+    "state": "ok",
+    "type": "duplex",
+    "conf": 0.75
+  },
+  "b12_b": {
+    "parse_error": true
+  },
+  "b12_c": {
+    "levels": 1,
+    "porches": 2,
+    "antennas": 0,
+    "state": "ok",
+    "type": "duplex",
+    "conf": 0.85
+  }
+}

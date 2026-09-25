@@ -87,7 +87,11 @@ def enc(im, q):
 
 def phase_a():
     os.makedirs(TMP, exist_ok=True)
-    files = sorted(f for f in os.listdir(SRC) if f.endswith('.jpg'))
+    # только карты зон: NN_Имя_зоны_ОРШ_схема_D.jpg (посторонние jpg
+    # вроде монтажей altay_task54_barracks.jpg — не включать)
+    files = sorted(f for f in os.listdir(SRC)
+                   if f.endswith('.jpg') and f[:2].isdigit()
+                   and f[2:3] == '_')
     print('A. Эталонный энкод q80 (оценка сложности)...', flush=True)
     refs, ims = [], []
     for f in files:
@@ -167,7 +171,7 @@ def title_page(c):
     y -= 46
     subs = ('Децентрализованная структура: зонные ОРШ (сплиттеры 1:64)',
             'при едином узле OLT · шесть сельских населённых пунктов ВКО',
-            '3 072 обслуживаемых домохозяйств · 36 зонных ОРШ + 6 ЦУ · ОРШ в центрах секторов, фидеры в границе НП')
+            '3 076 обслуживаемых домохозяйств · 36 зонных ОРШ + 6 ЦУ · ОРШ в центрах секторов, фидеры в границе НП')
     for s in subs:
         f = fit(s, 'DejaVu', 18.5, AW)
         c.setFont('DejaVu', f)
@@ -183,9 +187,9 @@ def title_page(c):
 
     # KPI-полоса: ширины ячеек пропорциональны содержимому
     kpis = [('6', 'сельских населённых пунктов'),
-            ('3 072', 'домохозяйств (ДХ)'),
+            ('3 076', 'домохозяйств (ДХ)'),
             ('36 + 6', 'зонных ОРШ + ЦУ (OLT)'),
-            ('1 495,7 км', 'суммарного волокна')]
+            ('1 497,1 км', 'суммарного волокна')]
     nat = [max(pdfmetrics.stringWidth(n, 'DejaVu-Bold', 33),
                pdfmetrics.stringWidth(l, 'DejaVu', 12.5)) + 44
            for n, l in kpis]
@@ -291,7 +295,7 @@ def title_page(c):
     c.setFont('DejaVu', 11)
     c.setFillColor(MUTED)
     c.drawString(M, 52, 'сентябрь 2026 г.')
-    c.drawRightString(W - M, 52, 'ВКО · 6 СНП · 3072 ДХ')
+    c.drawRightString(W - M, 52, 'ВКО · 6 СНП · 3076 ДХ')
 
 
 # ================================================== C. СБОРКА PDF ===========

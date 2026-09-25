@@ -1,0 +1,31 @@
+{
+ "289_barracks_lv2": {
+  "shadow_left_px": 16,
+  "shadow_right_px": 0
+ },
+ "290_barracks_lv2": {
+  "shadow_left_px": 2,
+  "shadow_right_px": 0
+ },
+ "291_barracks_lv2": {
+  "shadow_left_px": 0,
+  "shadow_right_px": 0
+ },
+ "282_barracks_lv2": {
+  "shadow_left_px": 0,
+  "shadow_right_px": 0
+ },
+ "281_private_lv1": {
+  "shadow_left_px": 40,
+  "shadow_right_px": 0
+ },
+ "283_check": {
+  "shadow_left_px": 0,
+  "shadow_right_px": 24
+ },
+ "hh131_check": {
+  "shadow_left_px": 0,
+  "shadow_right_px": 0,
+  "note": "\u0446\u0435\u043d\u0442\u0440 \u0437\u0434\u0430\u043d\u0438\u044f, \u043d\u0435 \u043a\u0440\u0430\u0439"
+ }
+}

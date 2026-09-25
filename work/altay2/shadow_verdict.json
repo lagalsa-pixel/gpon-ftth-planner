@@ -1,0 +1,19 @@
+{
+ "A": {
+  "levels": 2,
+  "shadow_vs_B": "короче",
+  "porches": 0,
+  "antennas": 0,
+  "state": "ruins"
+ },
+ "C": {
+  "levels": 1,
+  "shadow_vs_B": "короче",
+  "porches": 4,
+  "antennas": 2,
+  "state": "ok"
+ },
+ "C_is": "barracks",
+ "confidence": 0.9,
+ "why": "A — разрушенное двухэтажное здание с короткой тенью. C — длинное одноэтажное здание с множеством входов и антенн, похожее на барак."
+}
