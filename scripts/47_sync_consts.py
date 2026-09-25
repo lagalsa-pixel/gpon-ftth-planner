@@ -25,10 +25,10 @@ NEW = dict(
 NEW['route'] = round(sum(v['routes']['avg_m'] * v['dhx_served'] for v in VIL)
                      / max(1, T['dhx_served']), 1)
 
-# состояние книги ДО корректирующей пересборки Task 53 (промежуточная:
-# 3056 ДХ после первой итерации правок, до удаления 4 лишних дропов)
-OLD = dict(dhx=3056, zones=36, orsh=42, splitters=65, mufty=1104,
-           splices=6870, ports=5184, fiber=1490.4, route=279.2)
+# состояние книги Task 53 ФИНАЛ (до правок Task 54: бараки 289/290/291
+# по антенному критерию заказчика, +21 ДХ, -1 ложный в руинах)
+OLD = dict(dhx=3052, zones=36, orsh=42, splitters=64, mufty=1104,
+           splices=6859, ports=5040, fiber=1491.1, route=279.0)
 
 
 def ru_num(x, nd=0):

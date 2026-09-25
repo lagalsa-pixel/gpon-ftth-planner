@@ -1545,11 +1545,11 @@
    "orsh_bld": "здание на развилке дорог (156 м²)",
    "key": "altaiskiy",
    "net": "network_hh3.json",
-   "dhx_served": 615,
-   "couplers": 150,
-   "mufty": 144,
+   "dhx_served": 635,
+   "couplers": 149,
+   "mufty": 143,
    "feeder_km": 8.66,
-   "drop_km": 21.43,
+   "drop_km": 22.18,
    "avg_drop_m": 32.0,
    "max_drop_m": 86.8,
    "n_zones": 6,
@@ -1600,10 +1600,10 @@
     },
     {
      "root_dist_m": 653.9,
-     "houses": 121,
-     "splitters": 2,
-     "feeder_fibers": 3,
-     "orsh_ports": 144,
+     "houses": 141,
+     "splitters": 3,
+     "feeder_fibers": 4,
+     "orsh_ports": 288,
      "zone": "зонный ОРШ",
      "orsh_px": [
       3550.3,
@@ -1739,30 +1739,30 @@
      "lon": 82.362551
     }
    ],
-   "fiber_km": 186.7,
+   "fiber_km": 191.3,
    "total_cable_km": 8.747,
    "cable_km": {
     "8": 4.0,
-    "12": 1.3,
-    "16": 0.8,
+    "12": 1.2,
+    "16": 0.9,
     "24": 1.4,
-    "32": 0.7,
-    "48": 1.1,
+    "32": 0.8,
+    "48": 1.0,
     "64": 0.4,
     "72": 0.2,
-    "96": 0.1
+    "96": 0.2
    },
    "cable_km_raw": 9.62,
-   "drop_cable_km": 22.5,
-   "orsh_ports": 864,
-   "splitters64": 12,
-   "top_fibers": 125,
+   "drop_cable_km": 23.3,
+   "orsh_ports": 1008,
+   "splitters64": 13,
+   "top_fibers": 126,
    "max_parallel": 2,
    "feeder_route_km": 1.77,
    "routes": {
-    "avg_m": 181.9,
-    "med_m": 163.3,
-    "p90_m": 352.7,
+    "avg_m": 182.2,
+    "med_m": 170.6,
+    "p90_m": 351.3,
     "max_m": 538.0
    },
    "cut_log": [
@@ -1771,14 +1771,14 @@
       3132.77,
       6384.16
      ],
-     "sav_km": 113.2
+     "sav_km": 122.1
     },
     {
      "node": [
       3385.57,
       7090.85
      ],
-     "sav_km": 43.6
+     "sav_km": 50.7
     },
     {
      "node": [
@@ -1799,7 +1799,7 @@
       3100.26,
       7371.95
      ],
-     "sav_km": 23.3
+     "sav_km": 23.2
     },
     {
      "node": [
@@ -1811,72 +1811,72 @@
    ],
    "materials": {
     "orsh": 7,
-    "splitters": 12,
-    "olt_ports": 12,
-    "pigtails": 639,
-    "mufty": 144,
-    "drop_cable_km": 22.5,
-    "abonent_boxes": 615,
-    "fast_conn": 677,
-    "splices": 1380,
-    "kdzs": 1380,
+    "splitters": 13,
+    "olt_ports": 13,
+    "pigtails": 661,
+    "mufty": 143,
+    "drop_cable_km": 23.3,
+    "abonent_boxes": 635,
+    "fast_conn": 699,
+    "splices": 1426,
+    "kdzs": 1426,
     "suspend_kits": 263,
-    "drop_anchors": 1230,
-    "drop_fix": 3690,
-    "orsh_ports": 864,
+    "drop_anchors": 1270,
+    "drop_fix": 3810,
+    "orsh_ports": 1008,
     "cable_8": 4.0,
-    "cable_12": 1.3,
-    "cable_16": 0.8,
+    "cable_12": 1.2,
+    "cable_16": 0.9,
     "cable_24": 1.4,
-    "cable_32": 0.7,
-    "cable_48": 1.1,
+    "cable_32": 0.8,
+    "cable_48": 1.0,
     "cable_64": 0.4,
     "cable_72": 0.2,
-    "cable_96": 0.1
+    "cable_96": 0.2
    },
    "feeder_model": "v3: ОРШ в центре сектора (медиана дерева); фидер — кратчайший путь Дейкстра по дорожному графу, обрезанному границей НП"
   }
  ],
  "totals": {
-  "dhx_served": 3052,
+  "dhx_served": 3072,
   "dhx_excel": 3216,
-  "couplers": 1140,
-  "mufty": 1104,
+  "couplers": 1139,
+  "mufty": 1103,
   "n_zones": 36,
   "orsh": 42,
   "feeder_km": 82.11,
-  "fiber_km": 1491.1,
+  "fiber_km": 1495.7,
   "cable_km_raw": 90.48,
-  "drop_km": 118.99,
-  "drop_cable_km": 125.3,
-  "splitters64": 64,
-  "orsh_ports": 5040,
-  "splices": 6859,
-  "total_length_km": 215.8
+  "drop_km": 119.74,
+  "drop_cable_km": 126.1,
+  "splitters64": 65,
+  "orsh_ports": 5184,
+  "splices": 6905,
+  "total_length_km": 216.6
  },
  "materials_total": {
   "orsh": 42,
-  "splitters": 64,
-  "olt_ports": 64,
-  "pigtails": 3180,
-  "mufty": 1104,
-  "drop_cable_km": 125.3,
-  "abonent_boxes": 3052,
-  "fast_conn": 3360,
-  "splices": 6859,
-  "kdzs": 6859,
+  "splitters": 65,
+  "olt_ports": 65,
+  "pigtails": 3202,
+  "mufty": 1103,
+  "drop_cable_km": 126.1,
+  "abonent_boxes": 3072,
+  "fast_conn": 3382,
+  "splices": 6905,
+  "kdzs": 6905,
   "suspend_kits": 2472,
-  "drop_anchors": 6104,
-  "drop_fix": 18312,
-  "orsh_ports": 5040,
+  "drop_anchors": 6144,
+  "drop_fix": 18432,
+  "orsh_ports": 5184,
   "cable_8": 42.7,
-  "cable_12": 12.0,
-  "cable_16": 6.5,
+  "cable_12": 11.9,
+  "cable_16": 6.6,
   "cable_24": 14.9,
-  "cable_32": 7.0,
-  "cable_48": 6.0,
+  "cable_32": 7.1,
+  "cable_48": 5.9,
   "cable_64": 2.6,
   "cable_72": 0.6,
-  "cable_96": 0.6
+  "cable_96": 0.7
  }
 }

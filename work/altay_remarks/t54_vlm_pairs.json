@@ -1,0 +1,123 @@
+{
+ "496463519": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": true,
+   "apartments_b": false,
+   "n_entrances_b": 1,
+   "antennas_b": 0,
+   "evidence": "Короткое здание с одним входом и огородом, без антенн и множества крылец."
+  }
+ },
+ "496463521": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": false,
+   "apartments_b": false,
+   "n_entrances_b": 0,
+   "antennas_b": 0,
+   "evidence": "Плоская крыша без антенн и входов, окружено складскими площадками и техникой."
+  }
+ },
+ "637127276": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": true,
+   "apartments_b": false,
+   "n_entrances_b": 1,
+   "antennas_b": 0,
+   "evidence": "Одиночный дом с одним входом и садом, без антенн и множества крылец."
+  }
+ },
+ "637127279": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": false,
+   "apartments_b": false,
+   "n_entrances_b": 0,
+   "antennas_b": 1,
+   "evidence": "Плоская крыша, отсутствие входов и тропинок, большая площадка для транспорта."
+  }
+ },
+ "637127283": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": true,
+   "residential_b": true,
+   "apartments_b": true,
+   "n_entrances_b": 4,
+   "antennas_b": 4,
+   "evidence": "Длинное здание с двускатной крышей, 4 антенны и ряд входов/крылец вдоль фасада."
+  }
+ },
+ "637127288": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": false,
+   "apartments_b": false,
+   "n_entrances_b": 0,
+   "antennas_b": 0,
+   "evidence": "Квадратная форма, плоская крыша без антенн и входов, похожа на площадку или сарай."
+  }
+ },
+ "637127289": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": true,
+   "residential_b": true,
+   "apartments_b": true,
+   "n_entrances_b": 2,
+   "antennas_b": 0,
+   "evidence": "Длинное здание с двускатной крышей и двумя входами/крыльцами, аналогично эталону."
+  }
+ },
+ "637127295": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": false,
+   "apartments_b": false,
+   "n_entrances_b": 1,
+   "antennas_b": 0,
+   "evidence": "Плоская крыша, сложная форма, один вход, нет антенн и тропинок, есть машина на площадке."
+  }
+ },
+ "759801027": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": false,
+   "apartments_b": false,
+   "n_entrances_b": 0,
+   "antennas_b": 0,
+   "evidence": "Короткое здание без антенн и входов, примыкает к другим постройкам, похоже на сарай или склад."
+  }
+ },
+ "759801042": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": true,
+   "apartments_b": false,
+   "n_entrances_b": 1,
+   "antennas_b": 1,
+   "evidence": "Короткое здание с одной антенной и одним входом — это частный дом, а не барак."
+  }
+ },
+ "759801043": {
+  "ok": true,
+  "v": {
+   "same_type_as_A": false,
+   "residential_b": true,
+   "apartments_b": false,
+   "n_entrances_b": 1,
+   "antennas_b": 0,
+   "evidence": "Короткое здание с одним входом и без антенн — частный дом, а не барак."
+  }
+ }
+}

@@ -1,0 +1,167 @@
+{
+ "496463485": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "Нет видимых антенн на крыше",
+   "porches_row": true,
+   "n_entrances": 4,
+   "levels": 2,
+   "roof": "gable",
+   "chimneys": false,
+   "comment": "Двухэтажное здание с двускатной крышей и четырьмя крыльцами"
+  },
+  "tag": "APT_R2"
+ },
+ "496463512": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "не обнаружены",
+   "porches_row": true,
+   "n_entrances": 6,
+   "levels": 1,
+   "roof": "gable",
+   "chimneys": false,
+   "comment": "длинное одноэтажное здание с двускатной крышей и рядом крылец"
+  },
+  "tag": "APT_R1"
+ },
+ "496463513": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн нет",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "gable",
+   "chimneys": true,
+   "comment": "длинное одноэтажное здание с двускатной крышей и трубами"
+  },
+  "tag": "APT_R1"
+ },
+ "637127272": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн не видно",
+   "porches_row": true,
+   "n_entrances": 10,
+   "levels": 1,
+   "roof": "gable",
+   "chimneys": false,
+   "comment": "длинное одноэтажное здание с рядом входов"
+  },
+  "tag": "APT_R3_barracks"
+ },
+ "637127279": {
+  "ok": true,
+  "v": {
+   "tv_antennas": true,
+   "n_antennas": 1,
+   "antenna_desc": "Одна точка с тенью в центре плоской крыши",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "flat",
+   "chimneys": false,
+   "comment": "Здание с плоской крышей, одна антенна по центру"
+  },
+  "tag": "R3_private?"
+ },
+ "637127280": {
+  "ok": true,
+  "v": {
+   "tv_antennas": true,
+   "n_antennas": 8,
+   "antenna_desc": "Чёрные точки и короткие чёрточки вдоль конька",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "gable",
+   "chimneys": true,
+   "comment": "Длинное одноэтажное здание с двускатной крышей"
+  },
+  "tag": "APT_R3"
+ },
+ "637127288": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "не обнаружены",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "flat",
+   "chimneys": false,
+   "comment": "Контур охватывает пустой участок или тень рядом со зданием"
+  },
+  "tag": "R3_private?"
+ },
+ "637127289": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн на крыше не видно",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "gable",
+   "chimneys": false,
+   "comment": "одноэтажное здание с двускатной крышей без видимых антенн и крылец"
+  },
+  "tag": "R3_private?"
+ },
+ "637127290": {
+  "ok": true,
+  "v": {
+   "tv_antennas": true,
+   "n_antennas": 3,
+   "antenna_desc": "3 яркие точки вдоль правого края крыши",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 2,
+   "roof": "gable",
+   "chimneys": false,
+   "comment": "Двухэтажное здание с двускатной крышей и тремя антеннами"
+  },
+  "tag": "R3_private?"
+ },
+ "637127291": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "Нет антенн на крыше",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "other",
+   "chimneys": true,
+   "comment": "Видна крыша с трубами и белыми предметами (мусор/снег), без антенн"
+  },
+  "tag": "R3_private?"
+ },
+ "637127294": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн на крыше не видно",
+   "porches_row": true,
+   "n_entrances": 5,
+   "levels": 2,
+   "roof": "gable",
+   "chimneys": false,
+   "comment": "двухэтажное здание с двускатной крышей и пятью входами"
+  },
+  "tag": "APT_R2"
+ }
+}

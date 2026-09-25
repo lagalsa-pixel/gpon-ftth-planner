@@ -1,0 +1,70 @@
+{
+ "pair_637127289": {
+  "ok": true,
+  "v": {
+   "A_antennas": 5,
+   "B_antennas": 2,
+   "A_porches": 2,
+   "B_porches": 1,
+   "B_roof": "gable",
+   "B_same_type": true,
+   "B_levels": 1,
+   "B_verdict": "barracks",
+   "why": "Двускатная крыша, прямоугольная форма, вход с крыльцом, антенны на крыше."
+  }
+ },
+ "pair_637127290": {
+  "ok": true,
+  "v": {
+   "A_antennas": 2,
+   "B_antennas": 1,
+   "A_porches": 2,
+   "B_porches": 2,
+   "B_roof": "flat",
+   "B_same_type": true,
+   "B_levels": 1,
+   "B_verdict": "barracks",
+   "why": "Идентичная форма, плоская крыша, два входа, есть антенна и следы жилья."
+  }
+ },
+ "pair_637127291": {
+  "ok": true,
+  "v": {
+   "A_antennas": 0,
+   "B_antennas": 0,
+   "A_porches": 1,
+   "B_porches": 1,
+   "B_roof": "gable",
+   "B_same_type": true,
+   "B_levels": 2,
+   "B_verdict": "barracks",
+   "why": "Идентичная форма, размеры и структура крыши с эталонным бараком."
+  }
+ },
+ "pair_637127283": {
+  "ok": true,
+  "v": {
+   "A_antennas": 4,
+   "B_antennas": 1,
+   "A_porches": 2,
+   "B_porches": 0,
+   "B_roof": "gable",
+   "B_same_type": false,
+   "B_levels": 1,
+   "B_verdict": "ruins",
+   "why": "Отсутствуют крыльца и антенны, видны провалы крыши, структура разрушена."
+  }
+ },
+ "solo_637127295": {
+  "ok": true,
+  "v": {
+   "antennas": 0,
+   "porches": 1,
+   "roof": "complex",
+   "levels": 2,
+   "yard": "пустой с тропинками",
+   "verdict": "admin",
+   "why": "Сложная многоуровневая крыша, отсутствие антенн, формальный вход, пустой двор."
+  }
+ }
+}

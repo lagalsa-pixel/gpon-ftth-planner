@@ -1,0 +1,152 @@
+{
+ "496463484": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "Антенн не обнаружено",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "gable",
+   "gates": false,
+   "apartment_block": false,
+   "comment": "Складское или производственное здание с двускатной крышей"
+  }
+ },
+ "637127277": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн не видно",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "flat",
+   "gates": false,
+   "apartment_block": false,
+   "comment": "похоже на склад или гараж"
+  }
+ },
+ "637127278": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн не обнаружено",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "flat",
+   "gates": true,
+   "apartment_block": false,
+   "comment": "похоже на склад или гараж с плоской крышей"
+  }
+ },
+ "637127286": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн не обнаружено",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "flat",
+   "gates": false,
+   "apartment_block": false,
+   "comment": "одноэтажное здание с плоской крышей, вероятно склад или гараж"
+  }
+ },
+ "637127289": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн не видно",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "gable",
+   "gates": false,
+   "apartment_block": false,
+   "comment": "одноэтажное здание с двускатной крышей, без антенн и крылец"
+  }
+ },
+ "637127290": {
+  "ok": true,
+  "v": {
+   "tv_antennas": true,
+   "n_antennas": 3,
+   "antenna_desc": "3 яркие точки вдоль конька крыши",
+   "porches_row": true,
+   "n_entrances": 4,
+   "levels": 2,
+   "roof": "gable",
+   "gates": false,
+   "apartment_block": true,
+   "comment": "Двухэтажный жилой дом с 4 подъездами и антеннами"
+  }
+ },
+ "637127291": {
+  "ok": true,
+  "v": {
+   "tv_antennas": true,
+   "n_antennas": 4,
+   "antenna_desc": "4 яркие точки вдоль края крыши",
+   "porches_row": true,
+   "n_entrances": 4,
+   "levels": 2,
+   "roof": "flat",
+   "gates": false,
+   "apartment_block": true,
+   "comment": "Двухэтажный барак с плоской крышей и 4 входами"
+  }
+ },
+ "637127295": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "Антенн не обнаружено",
+   "porches_row": true,
+   "n_entrances": 4,
+   "levels": 2,
+   "roof": "flat",
+   "gates": false,
+   "apartment_block": true,
+   "comment": "Двухэтажный дом с плоской крышей и рядом крылец"
+  }
+ },
+ "637127296": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн нет",
+   "porches_row": false,
+   "n_entrances": 0,
+   "levels": 1,
+   "roof": "flat",
+   "gates": true,
+   "apartment_block": false,
+   "comment": "Плоское здание, похожее на склад или гараж"
+  }
+ },
+ "637127301": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_desc": "антенн не видно",
+   "porches_row": false,
+   "n_entrances": 1,
+   "levels": 1,
+   "roof": "gable",
+   "gates": false,
+   "apartment_block": false,
+   "comment": "одноэтажное здание с двускатной крышей"
+  }
+ }
+}

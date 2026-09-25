@@ -1,0 +1,18 @@
+{
+ "barracks_top": {
+  "connected": true,
+  "n_drops": 20
+ },
+ "barracks_middle": {
+  "connected": true,
+  "n_drops": 18
+ },
+ "barracks_bottom_left": {
+  "connected": true,
+  "n_drops": 15
+ },
+ "routes_along_roads": true,
+ "broken_routes": false,
+ "ruins_drops": 0,
+ "comment": "Все три барака подключены, трассы целые, к руинам дропов нет."
+}

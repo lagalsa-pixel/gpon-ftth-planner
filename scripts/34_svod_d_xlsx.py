@@ -196,8 +196,8 @@ for vi, v in enumerate(V):
     for k, val in v['materials'].items():
         sums[k] = sums.get(k, 0) + val
 sums['fiber_km'] = sum(v['fiber_km'] for v in V)
-assert sums['splitters'] == mt['splitters'] == 64
-assert sums['mufty'] == mt['mufty'] == 1104
+assert sums['splitters'] == mt['splitters'] == 65
+assert sums['mufty'] == mt['mufty'] == 1103
 assert abs(sums['drop_cable_km'] - mt['drop_cable_km']) < 0.05
 assert abs(sums['fiber_km'] - DBOOK['totals']['fiber_km']) < 0.05
 assert sum(1 for v in V) == 6 and sum(v['n_zones'] for v in V) == DBOOK['totals']['n_zones'] == 36

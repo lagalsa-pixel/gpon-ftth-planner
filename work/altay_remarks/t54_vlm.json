@@ -1,0 +1,152 @@
+{
+ "496463484": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "gable",
+   "residential": true,
+   "apartment_block": false,
+   "comment": "Одноэтажный дом с двускатной крышей без антенн и ряда крылец"
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"gable\", \"residential\": true, \"apartment_block\": false, \"comment\": \"Одноэтажный дом с двускатной крышей без антенн и ряда крылец\"}"
+ },
+ "637127277": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "flat",
+   "residential": false,
+   "apartment_block": false,
+   "comment": "Плоская крыша без антенн и крылец, вероятно, склад или гараж"
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"flat\", \"residential\": false, \"apartment_block\": false, \"comment\": \"Плоская крыша без антенн и крылец, вероятно, склад или гараж\"}"
+ },
+ "637127278": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "flat",
+   "residential": false,
+   "apartment_block": false,
+   "comment": "Плоская крыша без антенн и крылец, низкое здание, вероятно склад или гараж"
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"flat\", \"residential\": false, \"apartment_block\": false, \"comment\": \"Плоская крыша без антенн и крылец, низкое здание, вероятно склад или гараж\"}"
+ },
+ "637127286": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "gable",
+   "residential": false,
+   "apartment_block": false,
+   "comment": "Складское здание с двускатной крышей, без антенн и крылец"
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"gable\", \"residential\": false, \"apartment_block\": false, \"comment\": \"Складское здание с двускатной крышей, без антенн и крылец\"}"
+ },
+ "637127289": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "gable",
+   "residential": false,
+   "apartment_block": false,
+   "comment": "Хозпостройка/гараж: двускатная крыша, нет антенн и крылец, низкая."
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"gable\", \"residential\": false, \"apartment_block\": false, \"comment\": \"Хозпостройка/гараж: двускатная крыша, нет антенн и крылец, низкая.\"}"
+ },
+ "637127290": {
+  "ok": true,
+  "v": {
+   "tv_antennas": true,
+   "n_antennas": 2,
+   "antenna_where": "на крыше по центру и сзади",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "gable",
+   "residential": true,
+   "apartment_block": false,
+   "comment": "Одноэтажный дом с двускатной крышей и двумя антеннами"
+  },
+  "raw": "{\"tv_antennas\": true, \"n_antennas\": 2, \"antenna_where\": \"на крыше по центру и сзади\", \"porches_row\": false, \"levels\": 1, \"roof\": \"gable\", \"residential\": true, \"apartment_block\": false, \"comment\": \"Одноэтажный дом с двускатной крышей и двумя антеннами"
+ },
+ "637127291": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "gable",
+   "residential": true,
+   "apartment_block": false,
+   "comment": "Одноэтажный дом с двускатной крышей без антенн и крылец"
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"gable\", \"residential\": true, \"apartment_block\": false, \"comment\": \"Одноэтажный дом с двускатной крышей без антенн и крылец\"}"
+ },
+ "637127295": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "flat",
+   "residential": false,
+   "apartment_block": false,
+   "comment": "Плоская крыша, нет антенн и крылец, вероятно, склад или гараж"
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"flat\", \"residential\": false, \"apartment_block\": false, \"comment\": \"Плоская крыша, нет антенн и крылец, вероятно, склад или гараж\"}"
+ },
+ "637127296": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "flat",
+   "residential": false,
+   "apartment_block": false,
+   "comment": "Плоская крыша без антенн и крылец, вероятно, школа или административное здание."
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"flat\", \"residential\": false, \"apartment_block\": false, \"comment\": \"Плоская крыша без антенн и крылец, вероятно, школа или административное здание"
+ },
+ "637127301": {
+  "ok": true,
+  "v": {
+   "tv_antennas": false,
+   "n_antennas": 0,
+   "antenna_where": "",
+   "porches_row": false,
+   "levels": 1,
+   "roof": "gable",
+   "residential": true,
+   "apartment_block": false,
+   "comment": "Одноэтажный дом с двускатной крышей и одним входом, без антенн."
+  },
+  "raw": "{\"tv_antennas\": false, \"n_antennas\": 0, \"antenna_where\": \"\", \"porches_row\": false, \"levels\": 1, \"roof\": \"gable\", \"residential\": true, \"apartment_block\": false, \"comment\": \"Одноэтажный дом с двускатной крышей и одним входом, без антенн.\"}"
+ }
+}

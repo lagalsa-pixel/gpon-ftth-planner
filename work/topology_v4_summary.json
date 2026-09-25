@@ -34,21 +34,21 @@
   "total_length_km": 180.1
  },
  "v3_totals": {
-  "dhx_served": 3052,
+  "dhx_served": 3072,
   "dhx_excel": 3216,
-  "couplers": 1140,
-  "mufty": 1104,
+  "couplers": 1139,
+  "mufty": 1103,
   "n_zones": 36,
   "orsh": 42,
   "feeder_km": 82.11,
-  "fiber_km": 1491.1,
+  "fiber_km": 1495.7,
   "cable_km_raw": 90.48,
-  "drop_km": 118.99,
-  "drop_cable_km": 125.3,
-  "splitters64": 64,
-  "orsh_ports": 5040,
-  "splices": 6859,
-  "total_length_km": 215.8
+  "drop_km": 119.74,
+  "drop_cable_km": 126.1,
+  "splitters64": 65,
+  "orsh_ports": 5184,
+  "splices": 6905,
+  "total_length_km": 216.6
  },
  "villages": [
   {
@@ -886,24 +886,24 @@
    ],
    "same": false,
    "fiber_km_book": 124.2,
-   "fiber_km_A": 418.6,
-   "fiber_km_B": 186.7,
-   "cable_A": 11.69,
+   "fiber_km_A": 436.4,
+   "fiber_km_B": 191.3,
+   "cable_A": 11.83,
    "cable_B": 9.62,
-   "cost_A": 95.2,
-   "cost_B": 87.1,
+   "cost_A": 97.2,
+   "cost_B": 91.7,
    "cost": {
-    "cable": 15.3,
-    "drop": 11.2,
-    "hw": 59.0,
+    "cable": 15.6,
+    "drop": 11.7,
+    "hw": 62.9,
     "boxes": 1.5,
-    "total": 87.1
+    "total": 91.7
    },
    "feeder_route_km": 1.77,
    "routes": {
-    "avg_m": 181.9,
-    "med_m": 163.3,
-    "p90_m": 352.7,
+    "avg_m": 182.2,
+    "med_m": 170.6,
+    "p90_m": 351.3,
     "max_m": 538.0
    },
    "median_shift": {
@@ -935,7 +935,7 @@
      ],
      "shift_m": 78.0,
      "root_dist_m": 653.9,
-     "houses": 121
+     "houses": 141
     },
     {
      "cut": [
