@@ -34,21 +34,21 @@
   "total_length_km": 180.1
  },
  "v3_totals": {
-  "dhx_served": 2765,
+  "dhx_served": 3052,
   "dhx_excel": 3216,
   "couplers": 1140,
-  "mufty": 1108,
-  "n_zones": 32,
-  "orsh": 38,
+  "mufty": 1104,
+  "n_zones": 36,
+  "orsh": 42,
   "feeder_km": 82.11,
-  "fiber_km": 1474.4,
-  "cable_km_raw": 90.51,
-  "drop_km": 109.87,
-  "drop_cable_km": 115.8,
-  "splitters64": 59,
-  "orsh_ports": 4752,
-  "splices": 6216,
-  "total_length_km": 206.3
+  "fiber_km": 1491.1,
+  "cable_km_raw": 90.48,
+  "drop_km": 118.99,
+  "drop_cable_km": 125.3,
+  "splitters64": 64,
+  "orsh_ports": 5040,
+  "splices": 6859,
+  "total_length_km": 215.8
  },
  "villages": [
   {
@@ -860,41 +860,83 @@
    ],
    "zones_B": [
     [
+     3132.77,
+     6384.16
+    ],
+    [
+     3385.57,
+     7090.85
+    ],
+    [
      3687.62,
      5913.86
     ],
     [
-     3137.62,
-     6185.89
+     3326.62,
+     6258.49
+    ],
+    [
+     3100.26,
+     7371.95
+    ],
+    [
+     3457.95,
+     5846.69
     ]
    ],
    "same": false,
    "fiber_km_book": 124.2,
-   "fiber_km_A": 222.5,
-   "fiber_km_B": 170.0,
-   "cable_A": 10.25,
-   "cable_B": 9.65,
-   "cost_A": 68.0,
-   "cost_B": 61.1,
+   "fiber_km_A": 418.6,
+   "fiber_km_B": 186.7,
+   "cable_A": 11.69,
+   "cable_B": 9.62,
+   "cost_A": 95.2,
+   "cost_B": 87.1,
    "cost": {
-    "cable": 15.1,
-    "drop": 6.5,
-    "hw": 44.1,
-    "boxes": -4.5,
-    "total": 61.1
+    "cable": 15.3,
+    "drop": 11.2,
+    "hw": 59.0,
+    "boxes": 1.5,
+    "total": 87.1
    },
-   "feeder_route_km": 0.65,
+   "feeder_route_km": 1.77,
    "routes": {
-    "avg_m": 314.8,
-    "med_m": 276.7,
-    "p90_m": 570.8,
-    "max_m": 716.1
+    "avg_m": 181.9,
+    "med_m": 163.3,
+    "p90_m": 352.7,
+    "max_m": 538.0
    },
    "median_shift": {
-    "avg": 132.0,
-    "max": 196.0
+    "avg": 90.0,
+    "max": 154.0
    },
    "zones": [
+    {
+     "cut": [
+      3132.8,
+      6384.2
+     ],
+     "orsh": [
+      3130.5,
+      6481.0
+     ],
+     "shift_m": 37.0,
+     "root_dist_m": 273.9,
+     "houses": 93
+    },
+    {
+     "cut": [
+      3385.6,
+      7090.9
+     ],
+     "orsh": [
+      3550.3,
+      7213.6
+     ],
+     "shift_m": 78.0,
+     "root_dist_m": 653.9,
+     "houses": 121
+    },
     {
      "cut": [
       3687.6,
@@ -906,20 +948,46 @@
      ],
      "shift_m": 69.0,
      "root_dist_m": 335.9,
-     "houses": 90
+     "houses": 91
     },
     {
      "cut": [
-      3137.6,
-      6185.9
+      3326.6,
+      6258.5
      ],
      "orsh": [
-      3124.1,
-      6699.8
+      3376.5,
+      6659.1
      ],
-     "shift_m": 196.0,
-     "root_dist_m": 357.5,
-     "houses": 90
+     "shift_m": 154.0,
+     "root_dist_m": 432.9,
+     "houses": 59
+    },
+    {
+     "cut": [
+      3100.3,
+      7371.9
+     ],
+     "orsh": [
+      3028.3,
+      7544.0
+     ],
+     "shift_m": 71.0,
+     "root_dist_m": 709.6,
+     "houses": 73
+    },
+    {
+     "cut": [
+      3457.9,
+      5846.7
+     ],
+     "orsh": [
+      3531.4,
+      5515.7
+     ],
+     "shift_m": 129.0,
+     "root_dist_m": 305.9,
+     "houses": 56
     }
    ],
    "ctrl_v3_eq_v2": 0.0

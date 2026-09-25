@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "1) Много (к каждому корпусу подходит множество жёлтых линий).\n2) Да, к каждому из ~4 домов подходит свой жёлтый дроп.\n3) Нет, жёлтая линия проходит мимо плиты, но не заходит на неё.\n4) Да, у домов каждого из трёх рядов есть дропы.",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1790315185,
+  "id": "202609251346227668e157b6594864",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "202609251346227668e157b6594864",
+  "usage": {
+    "completion_tokens": 75,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 1861,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1936
+  }
+}

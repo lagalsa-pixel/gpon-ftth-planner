@@ -1,0 +1,68 @@
+{
+ "R1": {
+  "variant": "rotCCW",
+  "scale": 2.0,
+  "inliers": 26,
+  "good": 48,
+  "ncc": 0.979,
+  "region": [
+   982,
+   2864,
+   1231,
+   4005
+  ]
+ },
+ "R2": {
+  "variant": "raw",
+  "scale": 1.0,
+  "inliers": 59,
+  "good": 65,
+  "ncc": 0.971,
+  "region": [
+   1048,
+   4049,
+   1870,
+   5249
+  ]
+ },
+ "R3": {
+  "variant": "raw",
+  "scale": 1.0,
+  "inliers": 218,
+  "good": 256,
+  "ncc": 0.95,
+  "region": [
+   932,
+   5310,
+   2988,
+   7196
+  ]
+ },
+ "R4": {
+  "variant": "rotCW",
+  "scale": 0.5,
+  "inliers": 12,
+  "good": 13,
+  "ncc": 0.941,
+  "region": [
+   1843,
+   2436,
+   2127,
+   2683
+  ]
+ },
+ "R5": null,
+ "R6": {
+  "variant": "raw",
+  "scale": 0.5,
+  "inliers": 45,
+  "good": 49,
+  "ncc": 0.964,
+  "region": [
+   273,
+   1806,
+   998,
+   2209
+  ]
+ }
+}

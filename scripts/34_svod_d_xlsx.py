@@ -174,7 +174,7 @@ for sect_title, items in SECTIONS:
 row += 1
 notes = [
     'Значения в графах сел — потребность по проекту; графа «ИТОГО» — сумма по шести СНП. Единицы измерения разнородны, итог по столбцам не приводится.',
-    'Схема D (уточнённая детекция ДХ, полная VLM-верификация): 32 зон + 6 ЦУ = 38 ОРШ; заполнение сплиттеров 1:64 — 75-100%; ср. волоконный маршрут ДХ 305 м (против 1361 м в централизованной). Карты зон ОРШ по всем СНП — download/snp_vko.',
+    'Схема D (уточнённая детекция ДХ, полная VLM-верификация): 36 зон + 6 ЦУ = 42 ОРШ; заполнение сплиттеров 1:64 — 75-100%; ср. волоконный маршрут ДХ 279 м (против 1361 м в централизованной). Карты зон ОРШ по всем СНП — download/snp_vko.',
     'Солнечное: зонные ОРШ не образуются (село компактное, экономия волокна ниже порога S_MIN) — вся нагрузка на ЦУ.',
 ]
 for t in notes:
@@ -196,11 +196,11 @@ for vi, v in enumerate(V):
     for k, val in v['materials'].items():
         sums[k] = sums.get(k, 0) + val
 sums['fiber_km'] = sum(v['fiber_km'] for v in V)
-assert sums['splitters'] == mt['splitters'] == 59
-assert sums['mufty'] == mt['mufty'] == 1108
+assert sums['splitters'] == mt['splitters'] == 64
+assert sums['mufty'] == mt['mufty'] == 1104
 assert abs(sums['drop_cable_km'] - mt['drop_cable_km']) < 0.05
 assert abs(sums['fiber_km'] - DBOOK['totals']['fiber_km']) < 0.05
-assert sum(1 for v in V) == 6 and sum(v['n_zones'] for v in V) == DBOOK['totals']['n_zones'] == 32
+assert sum(1 for v in V) == 6 and sum(v['n_zones'] for v in V) == DBOOK['totals']['n_zones'] == 36
 
 # ============================================================ МЕТОДИКА ======
 ws4 = wb['Методика']

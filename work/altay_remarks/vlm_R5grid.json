@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "1) **F3-F6, G3-G6** (или F3-G6)\n2) **~7,6 × 7,6 м** (2×2 ячейки по ~3,8 м; с учётом 2x-зума реальный размер на местности может быть около 15×15 м, но в масштабе снимка это 4 ячейки).\n3) **Ровная однотонная светло-серая поверхность без видимой текстуры кирпича/кровли и без контуров стен.**",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1790314228,
+  "id": "20260925133025a933f31fd9164c3c",
+  "model": "glm-5v-turbo",
+  "object": "chat.completion",
+  "request_id": "20260925133025a933f31fd9164c3c",
+  "usage": {
+    "completion_tokens": 122,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 643,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 765
+  }
+}
