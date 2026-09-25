@@ -124,6 +124,29 @@ def draw_dashed(dr, pts, fill, width, phase=0.0, dash=30, gap=22):
         g += L
 
 
+def draw_mzd(dr, x, y, S, col, n):
+    """Task 58: значок МЖД — скруглённый квадрат цвета зоны с «этажами»
+    и бейджем числа квартир. Заменяет на карте группу квартирных ДХ:
+    дропы и точки квартир не прорисовываются, расчёт сохраняется."""
+    R = S(13)
+    dr.rounded_rectangle([x - R, y - R, x + R, y + R], radius=S(4),
+                         fill=tuple(col) + (235,), outline=(255, 255, 255, 255),
+                         width=S(3))
+    bw, bh = S(11), max(1, S(3))          # «этажи» — три белые полосы
+    for dy in (-S(5), 0, S(5)):
+        dr.rectangle([x - bw, y + dy - bh // 2, x + bw, y + dy + bh // 2],
+                     fill=(255, 255, 255, 255))
+    br = S(11)                             # бейдж: число квартир
+    bx, by = x + R - S(2), y - R + S(2)
+    fsz = S(20) if n < 100 else S(16)
+    f = ImageFont.truetype(FB, fsz)
+    dr.ellipse([bx - br, by - br, bx + br, by + br],
+               fill=(18, 20, 26, 255), outline=(255, 255, 255, 255),
+               width=S(2))
+    dr.text((bx, by), str(n), font=f, fill=(255, 255, 255, 255),
+            anchor='mm')
+
+
 class Labels:
     def __init__(self, S):
         self.S = S
@@ -234,6 +257,32 @@ def render_village(key):
             return t.root
         return zr[kk]
 
+    # --- Task 58: МЖД (многоэтажки/бараки с квартирными ДХ) — один значок
+    # с числом квартир; дропы и квартирные точки НЕ прорисовываются
+    # (прозрачность карты), расчёт (книга/сметы/зоны) полностью сохраняется.
+    mzd_path = f'{BASE}/work/{key}/mzd_groups.json'
+    MZD, mzd_hidden = [], set()
+    if os.path.exists(mzd_path):
+        mg = json.load(open(mzd_path, encoding='utf-8'))
+        drop_by_id = {d['hh_id']: d for d in net['drops']}
+        for g in mg:
+            if g.get('kind') != 'apartment':
+                continue
+            zs = [zone_of_drop(drop_by_id[h]) for h in g['hh_ids']
+                  if h in drop_by_id]
+            if not zs:
+                continue
+            zcnt = defaultdict(int)
+            for z in zs:
+                zcnt[z] += 1
+            MZD.append(dict(cx=g['cx'], cy=g['cy'], n=g['n'],
+                            hh_ids=set(g['hh_ids']),
+                            zone=max(zcnt, key=zcnt.get)))
+        mzd_hidden = set().union(*[g['hh_ids'] for g in MZD]) if MZD else set()
+    if MZD:
+        print(f'  МЖД-значков {len(MZD)}, скрыто дропов {len(mzd_hidden)} '
+              f'из {len(net["drops"])} (расчёт не изменён)', flush=True)
+
     # --- нумерация зон: по числу ДХ (по убыванию); ЦУ — отдельно ---
     zone_dh = defaultdict(int)
     for node, dh in t.homes.items():
@@ -245,10 +294,14 @@ def render_village(key):
         zcolor[c] = PALETTE[i % len(PALETTE)]
         zname[c] = f'ОРШ-{i + 1}'
 
-    # точки зон: дома + муфты + врез + медиана (ОРШ)
+    # точки зон: дома + муфты + врез + медиана (ОРШ);
+    # Task 58: квартирные ДХ под значками МЖД заменяются центром здания
     zpts = defaultdict(list)
     for d in net['drops']:
-        zpts[zone_of_drop(d)].append(d['poly'][-1])
+        if d['hh_id'] not in mzd_hidden:
+            zpts[zone_of_drop(d)].append(d['poly'][-1])
+    for g in MZD:
+        zpts[g['zone']].append((g['cx'], g['cy']))
     for c in net['couplers']:
         kk = nkey([c['x'], c['y']])
         if kk in zr:
@@ -277,11 +330,13 @@ def render_village(key):
         if len(hp) >= 3:
             dr.polygon(hp, fill=col + (38,), outline=col + (170,), width=S(4))
 
-    # 2) дропы (Task 51: пучки «одна муфта -> один дом» параллельными линиями)
+    # 2) дропы (Task 51: пучки «одна муфта -> один дом» параллельными
+    # линиями); Task 58: квартирные дропы МЖД не прорисовываются
     _tscale = math.hypot(Mi[0][0], Mi[0][1])
     drops_px = [dict(pts=[T(p) for p in d['poly']], coupler=d['coupler'],
                      color=C_DROP, width=S(2))
-                for d in net['drops'] if len(d['poly']) >= 2]
+                for d in net['drops']
+                if len(d['poly']) >= 2 and d['hh_id'] not in mzd_hidden]
     sym50.draw_drops_bundled(dr, drops_px, gap=max(3.5, 4.0 * k), width=S(2),
                              home_r_px=(35.0 / mpp) * _tscale)
 
@@ -320,18 +375,29 @@ def render_village(key):
         dr.rectangle([x - r, y - r, x + r, y + r], fill=C_COUP,
                      outline=C_COUP_OUT, width=S(2))
 
-    # 6) домохозяйства (цвет зоны)
+    # 6) домохозяйства (цвет зоны); Task 58: квартирные ДХ МЖД — под значком
     for d in net['drops']:
+        if d['hh_id'] in mzd_hidden:
+            continue
         col = zcolor[zone_of_drop(d)]
         x, y = T(d['poly'][-1])
         r = S(4)
         dr.rectangle([x - r, y - r, x + r, y + r], fill=col + (255,),
                      outline=C_HH_OUT, width=1)
 
+    # 6b) Task 58: МЖД — один значок с числом квартир (цвет зоны здания)
+    for g in MZD:
+        draw_mzd(dr, *T((g['cx'], g['cy'])), S, zcolor[g['zone']], g['n'])
+
     # 7) зонные ОРШ — в медиане зоны (центр сектора)
     f_z1 = fnt(S(34))
     f_z2 = fnt(S(26), bold=False)
     labels = Labels(S)
+    # подписи не должны перекрывать маркеры ОРШ, ЦУ и значки МЖД (Task 58)
+    for g in MZD:
+        ix, iy = T((g['cx'], g['cy']))
+        r_ = S(22)
+        labels.boxes.append((ix - r_, iy - r_, ix + r_, iy + r_))
     # подписи не должны перекрывать маркеры ОРШ и ЦУ — регистрируем их зоны
     for c in order:
         mx_, my_ = T(med_model[c])
@@ -399,7 +465,7 @@ def render_village(key):
              f"с. {db['name']} — схема D (v4): зонные ОРШ в центрах секторов, фидеры — кратчайшие пути в границе НП",
              font=f1, fill=(240, 245, 250))
     l2 = (f"{db['raion']} · {db['so']} · кадр {'пользователя' if key in CROPS else 'полной мозаики'} "
-          f"({mpp_new:.2f} м/px, спутник Google z18 ×{k:.0f}) · дерево сети, муфты и дропы — без изменений (как в схемах A/B/C); "
+          f"({mpp_new:.2f} м/px, спутник Google z18 ×{k:.0f}) · МЖД — один значок с числом квартир, дропы квартир не прорисованы (в расчёте); "
           f"граница НП — морфология застройки (шаг 46)")
     dh_.text((mx, S(68)), l2, font=fit_font(dh_, l2, S(27), W - 2 * mx, bold=False),
              fill=(170, 185, 200))
@@ -424,9 +490,12 @@ def render_village(key):
 
     fl_t, fl_r = fnt(S(32)), fnt(S(28), bold=False)
     LW = S(900)
-    LHH = S(58 + len(rows) * 52 + 36 + 50 + 8 * 52 + 28)
+    # Task 58: +1 строка (МЖД) + запас (низ обрезался ещё в v7)
+    LHH = S(58 + len(rows) * 52 + 36 + 50 + 10 * 52 + 28)
     m = S(20)
-    hh_pts = [T(d['poly'][-1]) for d in net['drops']]
+    hh_pts = [T(d['poly'][-1]) for d in net['drops']
+              if d['hh_id'] not in mzd_hidden]
+    hh_pts += [T((g['cx'], g['cy'])) for g in MZD]   # Task 58: значки тоже закрывать легендой нельзя
     coupler_pts = [T((c['x'], c['y'])) for c in net['couplers']]
     orsh_pts = [T(med_model[c]) for c in order]
     cu_pt = T((net['anchor']['x'], net['anchor']['y']))
@@ -462,11 +531,18 @@ def render_village(key):
     lg = Image.new('RGBA', (LW, LHH), (8, 12, 20, 218))
     ld = ImageDraw.Draw(lg)
     ld.text((S(20), S(14)), 'ЗОНЫ ОРШ (схема D v4, S_MIN = 15)', font=fl_t, fill=(240, 240, 240))
+
+    def leg_text(x, y, txt):
+        """Строка легенды: шрифт ужимается, если текст шире панели (Task 58
+        — правый срез строк был ещё в v7: фидер/ОРШ/ЦУ)."""
+        ld.text((x, y), txt, font=fit_font(ld, txt, S(28), LW - S(80), bold=False),
+                fill=(228, 232, 238))
+
     yy = S(58)
     for name, col, txt in rows:
         ld.rectangle([S(20), yy - S(15), S(52), yy + S(15)], fill=col,
                      outline=(255, 255, 255), width=S(2))
-        ld.text((S(64), yy - S(15)), f'{name}: {txt}', font=fl_r, fill=(228, 232, 238))
+        leg_text(S(64), yy - S(15), f'{name}: {txt}')
         yy += S(52)
     yy += S(14)
     ld.line([(S(20), yy), (LW - S(20), yy)], fill=(90, 100, 115), width=S(2))
@@ -475,42 +551,36 @@ def render_village(key):
     yy += S(50)
 
     draw_dashed(ld, [(S(20), yy), (S(52), yy)], C_BOUND, S(4), dash=S(26), gap=S(18))
-    ld.text((S(64), yy - S(15)), 'граница населённого пункта (морфология застройки)',
-            font=fl_r, fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'граница населённого пункта (морфология застройки)')
     yy += S(52)
     ld.line([(S(20), yy), (S(52), yy)], fill=C_TRUNK[:3], width=S(6))
-    ld.text((S(64), yy - S(15)), 'ствол сети: волокна зоны ЦУ + фидеры зон', font=fl_r,
-            fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'ствол сети: волокна зоны ЦУ + фидеры зон')
     yy += S(52)
     ld.line([(S(20), yy), (S(52), yy)], fill=PALETTE[0], width=S(6))
-    ld.text((S(64), yy - S(15)), 'распределительная сеть зоны (цвет зоны)', font=fl_r,
-            fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'распределительная сеть зоны (цвет зоны)')
     yy += S(52)
     draw_dashed(ld, [(S(20), yy), (S(52), yy)], PALETTE[1] + (235,), S(7),
                 dash=S(30), gap=S(22))
-    ld.text((S(64), yy - S(15)), 'фидер ЦУ → зонный ОРШ: кратчайший путь (ceil(1,25 × сплиттеры))',
-            font=fl_r, fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'фидер ЦУ → зонный ОРШ (1,25 × сплиттеры)')
     yy += S(52)
     ld.line([(S(20), yy), (S(52), yy)], fill=C_DROP[:3], width=S(4))
-    ld.text((S(64), yy - S(15)), 'дроп-кабель к домохозяйству', font=fl_r,
-            fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'дроп-кабель к домохозяйству')
     yy += S(52)
     ld.rectangle([S(28), yy - S(12), S(44), yy + S(12)], fill=C_COUP[:3],
                  outline=(0, 60, 60), width=S(2))
-    ld.text((S(64), yy - S(15)), 'муфта оптическая (ветвление)', font=fl_r,
-            fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'муфта оптическая (ветвление)')
     yy += S(52)
     ld.rectangle([S(30), yy - S(9), S(42), yy + S(9)], fill=PALETTE[2], outline=(25, 25, 25))
-    ld.text((S(64), yy - S(15)), 'домохозяйство (цвет его зоны)', font=fl_r,
-            fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'домохозяйство (цвет его зоны)')
+    yy += S(52)
+    draw_mzd(ld, S(36), yy, S, PALETTE[2], 24)     # Task 58: образец значка
+    leg_text(S(64), yy - S(15), 'МЖД — N квартир (дропы скрыты, учтены в расчёте)')
     yy += S(52)
     draw_orsh(ld, S(36), yy, S(14), PALETTE[3], 1)
-    ld.text((S(64), yy - S(15)), 'зонный ОРШ-N — уличный шкаф (номер зоны на шкафе, в центре сектора)',
-            font=fl_r, fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'зонный ОРШ-N — уличный шкаф (в центре сектора)')
     yy += S(52)
     draw_olt_node(ld, S(36), yy, S(14))
-    ld.text((S(64), yy - S(15)), 'ЦУ · OLT — центральный узел: станция OLT, вход магистрали',
-            font=fl_r, fill=(228, 232, 238))
+    leg_text(S(64), yy - S(15), 'ЦУ · OLT — центральный узел: вход магистрали')
 
     canvas.paste(lg, lg_pos, lg)
     del lg, base

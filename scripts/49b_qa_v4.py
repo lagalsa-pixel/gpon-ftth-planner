@@ -116,12 +116,22 @@ for v in de28.VILLAGES:
     ncu = count_color(ax, ay + HH, C_CU, 90, win=int(round(45 * k)))
     chk('ЦУ — красная звезда', ncu >= 50, f'красных в окне: {ncu}')
 
-    # легенда: сайдкар от рендера (48) — тёмная сине-чёрная панель
+    # легенда: сайдкар от рендера (48) — тёмная сине-чёрная панель.
+    # Task 58: выбор СЕТКОЙ 5x5 с порогом большинства (точечная проверка
+    # центра попадала на светлый глиф текста после роста панели +1 строка)
     lgs = json.load(open(f"{QAD}/{db['num']}_legend.json"))
-    lx, ly = int(lgs['x'] + lgs['W'] / 2), int(lgs['y'] + lgs['H'] / 2)
-    r_, g_, b_ = px[lx, ly]
-    chk('панель легенды (сайдкар)', r_ < 80 and g_ < 85 and b_ < 115 and b_ >= r_,
-        f'({lx},{ly}) rgb=({r_},{g_},{b_}), тег {lgs["tag"]}')
+    lx0, ly0, LW_, LH_ = lgs['x'], lgs['y'], lgs['W'], lgs['H']
+    dark = tot = 0
+    for fx in (0.1, 0.3, 0.5, 0.7, 0.9):
+        for fy in (0.08, 0.25, 0.45, 0.65, 0.85):
+            xi, yi = int(lx0 + LW_ * fx), int(ly0 + LH_ * fy)
+            if 0 <= xi < W and 0 <= yi < H:
+                tot += 1
+                r_, g_, b_ = px[xi, yi]
+                if r_ < 80 and g_ < 85 and b_ < 115 and b_ >= r_:
+                    dark += 1
+    chk('панель легенды (сайдкар, сетка 5x5)', tot > 0 and dark / tot >= 0.6,
+        f'тёмных {dark}/{tot}, тег {lgs["tag"]}')
 
     prev = f"{QAD}/{db['num']}_preview.png"
     chk('превью существует', os.path.exists(prev), prev)

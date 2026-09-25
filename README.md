@@ -11,7 +11,7 @@
 |---------|-----------|
 | `scripts/` | Пайплайн: детекция домовладений (VLM-верификация), проектирование сети, BoQ, карты, QA-скрипты; `scripts/tiles_cache/` — кэш спутниковых тайлов z18 |
 | `work/` | Промежуточные данные по каждому НП: вердикты VLM (`work/hh2/*/verdicts.json`), сеть, зоны ОРШ, BoQ-источники, QA |
-| `download/` | Релизные артефакты: `snp_vko/` — карты зон ОРШ по 6 НП (JPG), альбом PDF, BoQ-свод `Сводная_таблица_материалов_FTTH_ВКО_каскад.xlsx`, KMZ-фидеры, `ftth_pipeline/` — демо-пайплайн (Бобровка) |
+| `download/` | Релизные артефакты: `snp_vko/` — карты зон ОРШ по 6 НП (JPG), альбом PDF, BoQ-свод `Сводная_таблица_материалов_FTTH_ВКО_каскад.xlsx`, KMZ-фидеры, `ftth_pipeline/` — демо-пайплайн (Бобровка); `snp_vko/operator_review/` — операторские страницы контроля ДХ (HTML-редактор правок + corrections.json) |
 | `upload/` | Исходные материалы: спутниковые подложки НП (JPG/ZIP), методические PDF по проектированию PON |
 | `worklog.md` | Журнал работ (мультиагентный лог задач) |
 
@@ -51,5 +51,6 @@ git clone https://github.com/lagalsa-pixel/gpon-ftth-planner.git
 - `backup L6: push completed` — фиксация успешной отправки на GitHub (23.09.2026)
 - `Task 53-55: remarks push` — правки по замечаниям заказчика по Алтайскому, релиз v6 (25.09.2026)
 - `Task 57: remarks final` — южный карман +4 дома, 295 многоэтажка 1→8; релиз v7 (25.09.2026)
+- `Task 58: MZD icons + operator stage` — МЖД одним значком с числом квартир (31 значок, 482 ДХ, расчёт без изменений); этап ручной корректировки оператора (operator_review + corrections.json); релиз v8 (25.09.2026)
 
-**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner (main, head 3de0c7a) + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v7.zip` (124,6 МБ).
+**Статус: бэкап опубликован** — https://github.com/lagalsa-pixel/gpon-ftth-planner + Release `release-maps-vko` с активом `Karty_zon_ORSH_shema_D_VKO_v8.zip` (124,6 МБ). Итог ВКО: 3087 ДХ · 36 зон · 42 ОРШ · 1498,3 вол-км · 6938 сварок (QA ALL PASS).

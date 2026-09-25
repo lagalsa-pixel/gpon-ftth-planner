@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Операторский контроль ДХ — Солнечное</title>
+<style>
+  html,body{margin:0;height:100%;font-family:Arial,Helvetica,sans-serif;background:#10151d;color:#dfe6ee;overflow:hidden}
+  #map{position:absolute;inset:0;cursor:grab;background:#20262f}
+  #map.pan{cursor:grabbing}#map.add{cursor:crosshair}#map.del{cursor:not-allowed}#map.mzd{cursor:crosshair}#map.info{cursor:help}
+  #top{position:absolute;top:0;left:0;right:0;height:52px;background:#141a23f2;border-bottom:1px solid #2c3745;
+       display:flex;align-items:center;gap:10px;padding:0 14px;z-index:20;box-sizing:border-box}
+  #top b{font-size:15px;margin-right:6px}
+  button.tb{background:#223042;color:#dfe6ee;border:1px solid #39516e;border-radius:6px;padding:7px 12px;
+       font-size:13px;cursor:pointer}
+  button.tb.active{background:#2f66b0;border-color:#5b9bff}
+  button.tb:hover{filter:brightness(1.15)}
+  #hint{position:absolute;top:60px;left:14px;background:#141a23e8;border:1px solid #2c3745;border-radius:8px;
+       padding:8px 12px;font-size:12.5px;z-index:20;max-width:460px;line-height:1.45}
+  #panel{position:absolute;top:52px;right:0;bottom:0;width:342px;background:#141a23f5;border-left:1px solid #2c3745;
+       z-index:20;display:flex;flex-direction:column}
+  #panel h3{margin:0;padding:12px 14px 6px;font-size:14px;color:#9fc1ff}
+  #edits{flex:1;overflow-y:auto;padding:0 10px 10px}
+  .edit{background:#1b2430;border:1px solid #314052;border-radius:8px;padding:8px 10px;margin:8px 0;font-size:12.5px}
+  .edit .op{font-weight:bold;color:#ffd76a}
+  .edit .meta{color:#9db1c7;margin-top:3px;line-height:1.4}
+  .edit button{float:right;background:#5a2530;color:#f0c0c8;border:1px solid #7c3543;border-radius:5px;
+       padding:2px 8px;cursor:pointer;font-size:11.5px}
+  #ops{padding:10px;border-top:1px solid #2c3745;display:flex;flex-direction:column;gap:8px}
+  #ops button{width:100%;box-sizing:border-box}
+  #stats{font-size:12px;color:#8fa4bb;padding:0 14px 8px;line-height:1.5}
+  dialog{background:#1b2430;color:#dfe6ee;border:1px solid #39516e;border-radius:10px;padding:16px;font-size:14px}
+  dialog::backdrop{background:#0008}
+  dialog input{background:#10151d;color:#dfe6ee;border:1px solid #39516e;border-radius:5px;padding:6px;font-size:14px}
+  dialog .row{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+  #toast{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:#1f3a1f;border:1px solid #3f7c3f;
+       border-radius:8px;padding:9px 16px;font-size:13px;z-index:40;display:none}
+</style>
+</head>
+<body>
+<canvas id="map"></canvas>
+<div id="top">
+  <b>Операторский контроль ДХ · Солнечное</b>
+  <button class="tb active" data-mode="pan" title="Перетаскивание карты">🖐 Панорама</button>
+  <button class="tb" data-mode="add" title="Клик по месту — добавить домохозяйство">➕ Добавить ДХ</button>
+  <button class="tb" data-mode="del" title="Клик по синему квадрату — удалить ДХ">🗑 Удалить ДХ</button>
+  <button class="tb" data-mode="mzd" title="Клик по зданию — задать число квартир (МЖД)">🏢 МЖД квартиры</button>
+  <button class="tb" data-mode="info" title="Клик по объекту — свойства">ℹ Инфо</button>
+  <span style="flex:1"></span>
+  <button class="tb" id="btnReset">Сброс вида</button>
+</div>
+<div id="hint">Колесо — масштаб, перетаскивание — панорама. Режимы: добавить/удалить ДХ, задать
+число квартир МЖД (группа квартирных дропов пересоздаётся). Все правки попадают в список
+справа и выгружаются в <b>corrections.json</b> — файл подаётся на вход конвейеру
+(58c_apply_corrections.py), сеть/сметы пересчитываются автоматически.</div>
+<div id="panel">
+  <h3>Правки оператора</h3>
+  <div id="stats"></div>
+  <div id="edits"></div>
+  <div id="ops">
+    <button class="tb" id="btnExport">⬇ Скачать corrections.json</button>
+    <button class="tb" id="btnClear">Очистить все правки</button>
+  </div>
+</div>
+<div id="toast"></div>
+<dialog id="dlgAdd"><form method="dialog">
+  <b>Добавить домохозяйство</b>
+  <p style="color:#9db1c7">Координаты (мозаика): <span id="addXY"></span></p>
+  <p>Причина/примечание: <input id="addNote" size="30" placeholder="напр. пропущенный дом"></p>
+  <div class="row"><button value="cancel">Отмена</button><button value="ok" class="tb">Добавить</button></div>
+</form></dialog>
+<dialog id="dlgMzd"><form method="dialog">
+  <b>МЖД — число квартир</b>
+  <p style="color:#9db1c7" id="mzdInfo"></p>
+  <p>Квартир (ДХ): <input id="mzdN" type="number" min="2" max="400" value="8" style="width:70px">
+     &nbsp; разл. вдоль: <input id="mzdWh" type="number" min="4" max="200" value="30" style="width:60px"> ×
+     <input id="mzdHt" type="number" min="4" max="200" value="12" style="width:60px"> м</p>
+  <p>Примечание: <input id="mzdNote" size="30" placeholder="напр. 2 подъезда, 2 этажа"></p>
+  <div class="row"><button value="cancel">Отмена</button><button value="ok" class="tb">Задать</button></div>
+</form></dialog>
+
+<script src="data.js"></script>
+<script>
+'use strict';
+// DATA: {key,name,mpp,ds,M:[..2x3..],drops:[{i,p:[]..}],couplers:[{x,y}],
+//        buildings:[{id,p:[],tags,w,h}],mzd:[{bid,cx,cy,n}]}
+const cv = document.getElementById('map'), ctx = cv.getContext('2d');
+let W, H, DPR = window.devicePixelRatio || 1;
+const img = new Image(); img.src = 'base.jpg';
+
+// ---- мозаика -> изображение (crop*ds), вид: экран = imgCoord*s + off ----
+const M = DATA.M, ds = DATA.ds;
+function mos2img(p){ return [ (M[0][0]*p[0]+M[0][1]*p[1]+M[0][2])*ds,
+                              (M[1][0]*p[0]+M[1][1]*p[1]+M[1][2])*ds ]; }
+let s = 0.5, ox = 0, oy = 0, mode = 'pan', edits = [];
+// отложенные диалоги: showModal() неблокирующее — результат ждём в 'close'
+let pendingAdd = null, pendingMzd = null;
+document.getElementById('dlgAdd').addEventListener('close', () => {
+  const dlg = document.getElementById('dlgAdd');
+  if (dlg.returnValue === 'ok' && pendingAdd)
+    pushEdit(Object.assign({op: 'add_hh', note: document.getElementById('addNote').value}, pendingAdd));
+  pendingAdd = null; });
+document.getElementById('dlgMzd').addEventListener('close', () => {
+  const dlg = document.getElementById('dlgMzd');
+  if (dlg.returnValue === 'ok' && pendingMzd) {
+    const n = +document.getElementById('mzdN').value;
+    const note = document.getElementById('mzdNote').value;
+    if (pendingMzd.bid) pushEdit({op: 'set_mzd', bid: pendingMzd.bid, n, note});
+    else pushEdit({op: 'set_mzd', x: pendingMzd.x, y: pendingMzd.y,
+      w: +document.getElementById('mzdWh').value,
+      h: +document.getElementById('mzdHt').value, n, note}); }
+  pendingMzd = null; });
+
+function resize(){ W = innerWidth; H = innerHeight;
+  cv.width = W*DPR; cv.height = H*DPR; cv.style.width = W+'px'; cv.style.height = H+'px';
+  draw(); }
+addEventListener('resize', resize);
+
+function resetView(){ if(!img.naturalWidth){ setTimeout(resetView, 200); return; }
+  s = Math.min((W-342)/img.naturalWidth, (H-52)/img.naturalHeight);
+  ox = (W-342-img.naturalWidth*s)/2; oy = 52+(H-52-img.naturalHeight*s)/2; draw(); }
+document.getElementById('btnReset').onclick = resetView;
+
+function draw(){
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.fillStyle = '#20262f'; ctx.fillRect(0,0,W,H);
+  if(!img.naturalWidth){ requestAnimationFrame(draw); return; }
+  ctx.setTransform(DPR*s,0,0,DPR*s,DPR*ox,DPR*oy);
+  ctx.imageSmoothingEnabled = s < 2;
+  ctx.drawImage(img,0,0);
+  const lw = n => Math.max(1/(s*ds*0.5), n/(s));      // толщина в img-пикселях
+  // дропы
+  ctx.strokeStyle = 'rgba(255,225,0,0.85)'; ctx.lineWidth = lw(1.6);
+  ctx.beginPath();
+  for(const d of DATA.drops){ const P = d.p; if(P.length<2) continue;
+    ctx.moveTo(...mos2img(P[0]));
+    for(let i=1;i<P.length;i++) ctx.lineTo(...mos2img(P[i])); }
+  ctx.stroke();
+  // здания (тонко)
+  ctx.strokeStyle = 'rgba(120,160,200,0.4)'; ctx.lineWidth = lw(1);
+  ctx.beginPath();
+  for(const b of DATA.buildings){ const P = b.p;
+    ctx.moveTo(...mos2img(P[0])); for(let i=1;i<P.length;i++) ctx.lineTo(...mos2img(P[i]));
+    ctx.closePath(); }
+  ctx.stroke();
+  // муфты
+  ctx.fillStyle = 'rgba(0,255,225,0.9)';
+  const rc = 4.5/ds;
+  for(const c of DATA.couplers){ const q = mos2img([c.x,c.y]);
+    ctx.fillRect(q[0]-rc, q[1]-rc, 2*rc, 2*rc); }
+  // ДХ
+  const removed = new Set(edits.filter(e=>e.op==='remove_hh').map(e=>e.hh_id));
+  const mzdHH = new Set(); for(const g of DATA.mzd) for(const h of (g.hh_ids||[])) mzdHH.add(h);
+  ctx.fillStyle = '#37a0ff'; ctx.strokeStyle = '#0a2740';
+  const rh = 5/ds;
+  for(const d of DATA.drops){ if(removed.has(d.i)||mzdHH.has(d.i)) continue;
+    const q = mos2img(d.p[d.p.length-1]);
+    ctx.fillRect(q[0]-rh, q[1]-rh, 2*rh, 2*rh); }
+  // значки МЖД
+  for(const g of DATA.mzd){ const q = mos2img([g.cx,g.cy]); drawMzd(q[0], q[1], g.n, 13/ds); }
+  // правки: добавленные ДХ (зелёные), точки удаления (красные кольца)
+  ctx.fillStyle = '#3ddc6a';
+  for(const e of edits){ if(e.op!=='add_hh') continue; const q = mos2img([e.x,e.y]);
+    ctx.fillRect(q[0]-rh, q[1]-rh, 2*rh, 2*rh); }
+  ctx.strokeStyle = '#ff5a5a'; ctx.lineWidth = lw(2);
+  for(const e of edits){ if(e.op!=='remove_hh') continue;
+    const d = DATA.drops.find(x=>x.i===e.hh_id); if(!d) continue;
+    const q = mos2img(d.p[d.p.length-1]);
+    ctx.beginPath(); ctx.arc(q[0], q[1], 10/ds, 0, 7); ctx.stroke(); }
+}
+function drawMzd(x, y, n, R){
+  ctx.fillStyle = 'rgba(25,113,194,0.92)'; ctx.strokeStyle = '#fff'; ctx.lineWidth = R*0.22;
+  ctx.beginPath(); ctx.roundRect(x-R, y-R, 2*R, 2*R, R*0.3); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fff';
+  for(const dy of [-R*0.38, 0, R*0.38]) ctx.fillRect(x-R*0.55, y+dy-R*0.11, R*1.1, R*0.22);
+  const br = R*0.85; ctx.fillStyle = '#12141a';
+  ctx.beginPath(); ctx.arc(x+R*0.85, y-R*0.85, br, 0, 7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.font = `bold ${br*1.25}px Arial`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(String(n), x+R*0.85, y-R*0.8);
+}
+img.onload = ()=>{ resize(); resetView(); };
+
+// ---- взаимодействие ----
+let drag = null;
+cv.addEventListener('mousedown', e=>{ drag = [e.clientX, e.clientY, ox, oy]; });
+addEventListener('mouseup', ()=> drag = null);
+cv.addEventListener('mousemove', e=>{ if(drag && mode==='pan'){
+  ox = drag[2]+e.clientX-drag[0]; oy = drag[3]+e.clientY-drag[1]; draw(); } });
+cv.addEventListener('wheel', e=>{ e.preventDefault();
+  const k = e.deltaY < 0 ? 1.25 : 0.8;
+  const mx = (e.clientX-ox)/s, my = (e.clientY-oy)/s;
+  s = Math.min(8, Math.max(0.05, s*k));
+  ox = e.clientX-mx*s; oy = e.clientY-my*s; draw(); }, {passive:false});
+
+function screen2mos(cx, cy){ const ix=(cx-ox)/s, iy=(cy-oy)/s;
+  return [(ix)/ds, (iy)/ds]; }        // обратная M: для кропа M аффинна — см. ниже
+function undoM(p){ // img -> mosaic (обратное аффинное)
+  const x = p[0]/ds, y = p[1]/ds;
+  const a=M[0][0], b=M[0][1], c=M[0][2], d=M[1][0], e=M[1][1], f=M[1][2];
+  const det = a*e-b*d;
+  return [ (e*(x-c)-b*(y-f))/det, (-d*(x-c)+a*(y-f))/det ]; }
+function dist(p, q){ return Math.hypot(p[0]-q[0], p[1]-q[1]); }
+
+cv.addEventListener('click', e=>{
+  if(drag && (Math.abs(e.clientX-drag[0])>4||Math.abs(e.clientY-drag[1])>4)) return;
+  if(e.clientY < 52 || e.clientX > W-342) return;
+  const mos = undoM([(e.clientX-ox)/s, (e.clientY-oy)/s]);
+  if(mode==='add'){
+    document.getElementById('addXY').textContent =
+      `${mos[0].toFixed(0)}, ${mos[1].toFixed(0)} (M ${mosToMeters(mos).toFixed(0)} от угла)`;
+    pendingAdd = {x:+mos[0].toFixed(1), y:+mos[1].toFixed(1)};
+    const dlg = document.getElementById('dlgAdd'); dlg.returnValue=''; dlg.showModal();
+    return; }
+  // ближайший ДХ
+  let best=null, bd=1e9;
+  for(const d of DATA.drops){ const q=d.p[d.p.length-1];
+    const dd = dist(mos, q)/(DATA.mpp||1); if(dd<bd){ bd=dd; best=d; } }
+  if(mode==='del'){ if(best && bd<12) pushEdit({op:'remove_hh', hh_id:best.i, note:''}); else toast('ДХ не найден (кликните по синему квадрату)'); return; }
+  if(mode==='info'){ if(best && bd<12){ toast(`ДХ hh_id=${best.i}: ${bd.toFixed(1)} м от клика, дроп-длина ${(best.len||0).toFixed(0)} м`); }
+    else { const b = bldAt(mos); if(b) toast(`Здание OSM ${b.id}: ${b.w.toFixed(0)}×${b.h.toFixed(0)} м, теги ${JSON.stringify(b.tags)}`);
+      else toast('пусто'); } return; }
+  if(mode==='mzd'){
+    const b = bldAt(mos, 20);
+    const info = document.getElementById('mzdInfo');
+    if(b) info.textContent = `Здание OSM ${b.id} (${b.w.toFixed(0)}×${b.h.toFixed(0)} м) — квартирные ДХ встанут вдоль длинной оси`;
+    else info.textContent = `Здание вне OSM: бокс ${mos[0].toFixed(0)},${mos[1].toFixed(0)} — задайте размеры W×H`;
+    pendingMzd = b ? {bid: b.id} : {x:+mos[0].toFixed(1), y:+mos[1].toFixed(1)};
+    const dlg = document.getElementById('dlgMzd'); dlg.returnValue=''; dlg.showModal();
+  }
+});
+function mosToMeters(p){ return Math.hypot(p[0], p[1])*(DATA.mpp||1); }
+function bldAt(mos, tolPx=10){
+  let best=null, bd=1e9;
+  for(const b of DATA.buildings){
+    const c = b.c; const dd = dist(mos, c)/(DATA.mpp||1);
+    if(dd < Math.max(b.w, b.h)/2 + tolPx && dd < bd){ bd=dd; best=b; } }
+  return best; }
+
+// ---- правки ----
+function pushEdit(e){ edits.push(Object.assign(e, {ts: new Date().toISOString().slice(0,16)})); renderEdits(); draw(); }
+function renderEdits(){
+  const box = document.getElementById('edits'); box.innerHTML='';
+  for(let i=0;i<edits.length;i++){ const e = edits[i];
+    const div = document.createElement('div'); div.className='edit';
+    let t='', m='';
+    if(e.op==='add_hh'){ t='➕ добавить ДХ'; m=`x=${e.x}, y=${e.y}`; }
+    if(e.op==='remove_hh'){ t='🗑 удалить ДХ'; m=`hh_id=${e.hh_id}`; }
+    if(e.op==='set_mzd'){ t='🏢 МЖД квартиры'; m=(e.bid?`здание ${e.bid}, `:`x=${e.x}, y=${e.y}, ${e.w}×${e.h} м, `)+`N=${e.n}`; }
+    if(e.note) m += '<br>«'+e.note+'»';
+    div.innerHTML = `<span class="op">${t}</span><button data-i="${i}">✕</button><div class="meta">${m}</div>`;
+    div.querySelector('button').onclick = ev=>{ edits.splice(+ev.target.dataset.i,1); renderEdits(); draw(); };
+    box.appendChild(div); }
+  const dh0 = DATA.drops.length, add = edits.filter(e=>e.op==='add_hh').length,
+        rem = edits.filter(e=>e.op==='remove_hh').length;
+  document.getElementById('stats').innerHTML =
+    `ДХ в сети: <b>${dh0}</b> · правок: <b>${edits.length}</b><br>после применения: <b>${dh0+add-rem}+МЖД</b> ДХ`;
+}
+document.getElementById('btnClear').onclick = ()=>{ edits=[]; renderEdits(); draw(); };
+document.getElementById('btnExport').onclick = ()=>{
+  const blob = new Blob([JSON.stringify({village:DATA.key, base_dh:DATA.drops.length,
+    created:new Date().toISOString(), operator:'', edits}, null, 1)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'corrections.json'; a.click(); toast('corrections.json сохранён — передайте его в конвейер'); };
+function toast(t){ const el = document.getElementById('toast'); el.textContent=t; el.style.display='block';
+  setTimeout(()=>el.style.display='none', 3500); }
+
+// ---- режимы ----
+for(const b of document.querySelectorAll('#top button[data-mode]'))
+  b.onclick = ()=>{ mode = b.dataset.mode;
+    document.querySelectorAll('#top button[data-mode]').forEach(x=>x.classList.toggle('active', x===b));
+    cv.className = mode; };
+resize();
+</script>
+</body>
+</html>
